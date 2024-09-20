@@ -21,6 +21,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/components/MUI/verticaldots.jsx", "app/components/MUI/chevronicon.jsx", "app/components/FTable/app.jsx"],
   "exclude": ["node_modules"]
 }
