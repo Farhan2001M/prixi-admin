@@ -21,6 +21,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/components/MUI/verticaldots.jsx", "app/components/MUI/chevronicon.jsx", "app/components/FTable/app.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/components/MUI/verticaldots.jsx", "app/components/MUI/chevronicon.jsx", "app/components/FTable/app.jsx", "app/components/MUI/Button.jsx", "app/addupdatevehicles/[brand]/page.jsx"],
   "exclude": ["node_modules"]
 }
