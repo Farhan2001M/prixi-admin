@@ -57,7 +57,6 @@ export const DeleteModelModal: React.FC<DeleteConfirmationModalProps> = ({ isOpe
             draggable: false,
             style: { backgroundColor: 'black', color: 'white' }, // Black background
         });
-        
         onDelete(); // Call onDelete to refresh the list if needed
       } else {
         toast.error(result.detail || "An error occurred while deleting the model", {

@@ -23,7 +23,7 @@ const OTPScreen: React.FC<OTPScreenProps> = ({ visible, onClick, Femail }) => {
       otpRef.current.clearOtp(); // Clear the OTP when requesting a new one
     }
     try {
-      const response = await fetch('http://localhost:8000/forgot-password', {
+      const response = await fetch('http://localhost:8000/admin-forgot-password', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ const OTPScreen: React.FC<OTPScreenProps> = ({ visible, onClick, Femail }) => {
   
     try {
       // Make a request to the FastAPI validate_otp endpoint
-      const response = await fetch('http://localhost:8000/validate-otp', { // Adjust the endpoint as needed
+      const response = await fetch('http://localhost:8000/admin-validate-otp', { // Adjust the endpoint as needed
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

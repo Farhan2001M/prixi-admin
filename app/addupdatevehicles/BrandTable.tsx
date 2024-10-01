@@ -2,8 +2,7 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 
 import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell} from "@nextui-org/react";
-import {Button, ButtonGroup} from "@nextui-org/react";
-// import Mybutton from '../MUI/Button'
+import {Button} from "@nextui-org/react";
 import { Link } from "@nextui-org/react";
 
 interface CarBrand {
@@ -11,7 +10,11 @@ interface CarBrand {
   models: any[];
 }
 
-export default function BrandTable() {
+interface BrandTableProps {
+  refresh: boolean;
+}
+
+export const BrandTable: React.FC<BrandTableProps> = ({ refresh }) => {
   
   const [brandsData, setBrandsData] = useState<CarBrand[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,8 +33,9 @@ export default function BrandTable() {
   };
   useEffect(() => {
     fetchBrandsModels();
-  }, []);
+  }, [refresh]);
 
+  
   if (loading) return <p>Loading...</p>;
 
   return (
@@ -49,7 +53,7 @@ export default function BrandTable() {
               <TableCell>{brand.models ? brand.models.length : 0}</TableCell> 
               <TableCell>
                 <Button
-                  href={`/addupdatevehicles/${brand.brandName}`} // Correctly using template literals
+                  href={`/addupdatevehicles/${brand.brandName}`} 
                   as={Link}
                   color="primary"
                   variant="solid"
@@ -64,5 +68,4 @@ export default function BrandTable() {
     </div>
   );  
 }
-
 

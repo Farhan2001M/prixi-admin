@@ -3,12 +3,27 @@
 import React, { useState, FormEvent , useEffect } from 'react';
 import Link from 'next/link';
 import { IoEye, IoEyeOff } from 'react-icons/io5';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import { GrLogin } from "react-icons/gr";
 import ForgotPassScreen from '../components/LoginFPSC/ForgotPassScreen';
 import { setCookie } from 'nookies'; // A Next.js-friendly library for handling cookies
 
+import { useRouter, useSearchParams } from 'next/navigation';
+
 const Myloginpage = () => {
+
+  
+
+  const searchParams = useSearchParams();
+  const expired = searchParams.get('expired');
+
+  useEffect(() => {
+      if (expired) {
+          alert('Your session has expired. Please log in again.');
+      }
+  }, [expired]);
+
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -80,7 +95,7 @@ const Myloginpage = () => {
         const query = new URLSearchParams({ email, password }).toString();
     
         // Send the request with query parameters
-        const response = await fetch(`http://localhost:8000/login?${query}`, {
+        const response = await fetch(`http://localhost:8000/adminlogin?${query}`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -104,12 +119,13 @@ const Myloginpage = () => {
         const data: any = await response.json();
         
         if(response.ok){
-          console.log(data);
-          setCookie(null, 'token', data.token, {
-            maxAge: 100 * 60 * 24,    // 100/15 minutes {60 * 60 * 24, } in seconds
-            path: '/', // Make cookie accessible to the entire site
-          });
+          const token = data.token;
+          const expiryTime = Date.now() + (50 * 60 * 1000); // Token valid for 50 minute
+          // Store token and expiry time
+          localStorage.setItem('token', token);
+          localStorage.setItem('tokenExpiry', expiryTime.toString());
           router.push('/adminpanel'); // Redirect to another page
+
         } else {
           console.error('Unexpected response:', data);
         }
