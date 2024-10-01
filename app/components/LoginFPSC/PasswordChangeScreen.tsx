@@ -8,6 +8,12 @@ import { IoEye, IoEyeOff } from 'react-icons/io5';
 
 import ConfirmationOfPasswordScreen from './ConfirmationOfPasswordScreen';
 
+
+interface ValidationErrors {
+  password?: string;
+  confirmPassword?: string;
+}
+
 interface PasswordChangeScreenProps {
   visible: boolean;
   onClick: () => void;
@@ -21,9 +27,9 @@ const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , o
   const [RSTconfirmPassword, setRSTconfirmPassword] = useState('');
   const [RSTisPasswordVisible, setRSTisPasswordVisible] = useState(false);
   const [RSTisConfirmPasswordVisible, setRSTisConfirmPasswordVisible] = useState(false);
-  const [RSTerrors, setRSTerrors] = useState<any>({});
+  // const [RSTerrors, setRSTerrors] = useState<any>({});
+  const [RSTerrors, setRSTerrors] = useState<ValidationErrors>({});
   const [PasswordChangeError, setPasswordChangeError] = useState('');
-  
   const [myemail, setEmail] = useState('');
 
   useEffect(() => {
@@ -33,7 +39,7 @@ const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , o
   }, [email]);
 
   const RSTvalidateFields = (name: string, value: string) => {
-    const RSTnewErrors: any = {};
+    const RSTnewErrors: ValidationErrors = {};
 
     if (name === 'password') {
       if (value.length < 1) {
@@ -60,7 +66,7 @@ const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , o
         RSTnewErrors.confirmPassword = '';
       }
     }
-    setRSTerrors((prevErrors: any) => ({ ...prevErrors, ...RSTnewErrors }));
+    setRSTerrors((prevErrors) => ({ ...prevErrors, ...RSTnewErrors }));
   };
   const RSThandleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -68,9 +74,15 @@ const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , o
     if (name === 'confirmPassword') setRSTconfirmPassword(value);
     RSTvalidateFields(name, value);
   };
-  const isButtonDisabled = () => {
-    return RSTerrors.password || RSTerrors.confirmPassword || !RSTpassword || !RSTconfirmPassword;
+
+  
+  const isButtonDisabled = (): boolean => {
+    return ( !!RSTerrors.password || !!RSTerrors.confirmPassword || !RSTpassword || !RSTconfirmPassword );
   };
+
+  // const isButtonDisabled = () => {
+  //   return RSTerrors.password || RSTerrors.confirmPassword || !RSTpassword || !RSTconfirmPassword;
+  // };
   
   
   {/* Success Password Change Screen Code */}
@@ -134,7 +146,7 @@ const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , o
           <RxCrossCircled onClick={ ()=> {
             setRSTpassword('');
             setRSTconfirmPassword('');
-            setRSTerrors('');
+            setRSTerrors({});
             onClick(); }} 
             className='absolute top-1 right-1 text-black hover:text-red-500 cursor-pointer' size={40}  />
 
@@ -223,7 +235,7 @@ const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , o
         setRSTpassword('');
         setRSTconfirmPassword('');
         onClick();
-        setRSTerrors('');
+        setRSTerrors({});
       } } > </div>
       
       <ConfirmationOfPasswordScreen visible={showConfirmationOfPasswordScreen} onClick={() => setShowConfirmationOfPasswordScreen(false)} />

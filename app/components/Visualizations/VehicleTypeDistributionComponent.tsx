@@ -12,6 +12,18 @@ interface VehicleTypeDistributionProps {
   }[];
 }
 
+// Function to generate distinct colors
+const generateColors = (count: number) => {
+  const colors: string[] = [];
+  const baseColors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#4B4CFF', '#FF6F61', '#45A1FF'];
+
+  for (let i = 0; i < count; i++) {
+    colors.push(baseColors[i % baseColors.length]);
+  }
+
+  return colors;
+};
+
 const VehicleTypeDistributionComponent: React.FC<VehicleTypeDistributionProps> = ({ brandsData }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -30,16 +42,18 @@ const VehicleTypeDistributionComponent: React.FC<VehicleTypeDistributionProps> =
       });
     });
 
+    const labels = Object.keys(vehicleTypeCount);
+    const data = Object.values(vehicleTypeCount);
+    const colors = generateColors(labels.length);
+
     const myChart = new Chart(ctx, {
       type: 'pie',
       data: {
-        labels: Object.keys(vehicleTypeCount),
+        labels,
         datasets: [{
           label: 'Vehicle Type Distribution',
-          data: Object.values(vehicleTypeCount),
-          backgroundColor: [
-            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'
-          ],
+          data,
+          backgroundColor: colors,
         }],
       },
       options: {

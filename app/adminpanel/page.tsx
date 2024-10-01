@@ -11,9 +11,28 @@ import EngineTypeDistributionComponent from '../components/Visualizations/Engine
 import ColorsDistributionComponent from '../components/Visualizations/ColorsDistributionComponent';
 import SeatingCapacityDistributionComponent from '../components/Visualizations/SeatingCapacityDistributionComponent';
 
+interface Comment {
+  userEmail: string;
+  Likes?: string[]; // Add Likes to the comment structure
+}
+
+interface ModelData {
+  modelName: string;
+  vehicleType?: string;
+  engineType?: string;
+  description?: string;
+  torque?: number;
+  launchPrice?: number;
+  horsepower?: number;
+  seatingCapacity?: number;
+  variants?: string[];
+  colors?: string[];
+  images?: string[]; 
+  comments?: Comment[]; 
+};
 interface CarBrand {
   brandName: string;
-  models: any[];
+  models: ModelData[];
 }
 
 const UserInterface = () => {

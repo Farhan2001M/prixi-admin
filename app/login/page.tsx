@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, FormEvent , useEffect } from 'react';
+import React, { useState, FormEvent , useEffect , Suspense } from 'react';
 import Link from 'next/link';
 import { IoEye, IoEyeOff } from 'react-icons/io5';
 // import { useRouter } from 'next/navigation';
@@ -8,13 +8,15 @@ import { GrLogin } from "react-icons/gr";
 import ForgotPassScreen from '../components/LoginFPSC/ForgotPassScreen';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-const Myloginpage = () => {
+interface AuthResponse {
+  token: string;
+}
 
-  
+const Myloginpage = () => {  
 
   const searchParams = useSearchParams();
   const expired = searchParams.get('expired');
-
+  
   useEffect(() => {
       if (expired) {
           alert('Your session has expired. Please log in again.');
@@ -114,7 +116,7 @@ const Myloginpage = () => {
         }
     
         // If login is successful
-        const data: any = await response.json();
+        const data: AuthResponse = await response.json();
         
         if(response.ok){
           const token = data.token;
@@ -234,5 +236,17 @@ const Myloginpage = () => {
   );
 }
 
-export default Myloginpage;
+
+
+// Wrap the Myloginpage component in Suspense
+const SuspenseWrapper = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <Myloginpage />
+  </Suspense>
+);
+
+export default SuspenseWrapper;
+
+
+// export default Myloginpage;
 

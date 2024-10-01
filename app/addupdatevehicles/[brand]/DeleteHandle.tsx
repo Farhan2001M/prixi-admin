@@ -8,8 +8,8 @@ import { MdErrorOutline } from "react-icons/md";
 type DeleteConfirmationModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  model: any;
-  brand: any;
+  model: string;
+  brand: string;
   onDelete: () => void; // Function called when deletion is confirmed
 };
 
@@ -132,5 +132,4 @@ export const DeleteModelModal: React.FC<DeleteConfirmationModalProps> = ({ isOpe
     </>
   );
 };
-
 

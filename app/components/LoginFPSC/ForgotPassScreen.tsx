@@ -7,6 +7,10 @@ interface ForgotPassScreenProps {
   onClick: () => void;
 }
 
+interface SuccessResponse {
+  message: string;
+}
+
 const ForgotPassScreen: React.FC<ForgotPassScreenProps> = ({ show, onClick }) => {
   const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
   
@@ -51,7 +55,7 @@ const ForgotPassScreen: React.FC<ForgotPassScreenProps> = ({ show, onClick }) =>
           return;
       }
 
-      const data: any = await response.json();
+      const data: SuccessResponse = await response.json();
 
       console.log(data)
       console.log(data.message)

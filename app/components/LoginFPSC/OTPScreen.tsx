@@ -10,6 +10,10 @@ interface OTPScreenProps {
   Femail: string;
 }
 
+interface OTPResponse {
+  message: string;
+}
+
 const OTPScreen: React.FC<OTPScreenProps> = ({ visible, onClick, Femail }) => {
 
   const [showPasswordChangeScreen, setShowPasswordChangeScreen] = useState<boolean>(false);
@@ -41,19 +45,13 @@ const OTPScreen: React.FC<OTPScreenProps> = ({ visible, onClick, Femail }) => {
           return;
       }
 
-      const data: any = await response.json();
+      const data: OTPResponse = await response.json(); // Use the defined interface
 
       console.log(data)
       console.log(data.message)
 
       // If OTP is successfully sent again, show this
       console.log(displayFemail)
-      
-
-      // setTimeout(() => {
-      //   console.log(displayFemail);
-      //   startTimer();
-      // }, 30);
 
     } catch (error) {
         console.error('An error occurred:', error);

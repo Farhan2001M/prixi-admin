@@ -5,9 +5,24 @@ import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell} from "@
 import {Button} from "@nextui-org/react";
 import { Link } from "@nextui-org/react";
 
+interface ModelData {
+  modelName?: string;
+  vehicleType?: string;
+  engineType?: string;
+  description?: string;
+  torque?: number;
+  launchPrice?: number;
+  horsepower?: number;
+  seatingCapacity?: number;
+  variants?: string[];
+  colors?: string[];
+  images?: string[]; // Base64 encoded images
+  comments?: string[]; // Base64 encoded images
+};
+
 interface CarBrand {
   brandName: string;
-  models: any[];
+  models: ModelData[];
 }
 
 interface BrandTableProps {
