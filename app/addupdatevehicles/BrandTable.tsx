@@ -37,7 +37,7 @@ export const BrandTable: React.FC<BrandTableProps> = ({ refresh }) => {
   // Fetch the brands and models from the FastAPI backend
   const fetchBrandsModels = async () => {
     try {
-      const response = await fetch('http://localhost:8000/vehicles');
+      const response = await fetch('https://de05-2407-d000-1a-66a0-6050-2c36-62e5-9435.ngrok-free.app/vehicles');
       const data = await response.json();
       setBrandsData(data);
       setLoading(false);

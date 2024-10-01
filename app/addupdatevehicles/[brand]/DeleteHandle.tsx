@@ -34,7 +34,7 @@ export const DeleteModelModal: React.FC<DeleteConfirmationModalProps> = ({ isOpe
     onClose(); // Close the modal
     try {
       // Make DELETE API call using fetch
-      const response = await fetch('http://localhost:8000/delete-brand-model', {
+      const response = await fetch('https://de05-2407-d000-1a-66a0-6050-2c36-62e5-9435.ngrok-free.app/delete-brand-model', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
