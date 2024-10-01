@@ -133,7 +133,7 @@ export const AddModelModal: React.FC<AddModelModalProps> = ({ isOpen, onClose, b
     });
 
     // Append images
-    images.forEach((image, index) => {
+    images.forEach((image) => {
       formData.append(`images`, image);
     });
 

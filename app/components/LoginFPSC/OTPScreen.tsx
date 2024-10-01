@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { RxCrossCircled } from "react-icons/rx";
-import Link from 'next/link';
 import OtpInput from './Otp';
 import PasswordChangeScreen from './PasswordChangeScreen';
 
@@ -98,7 +97,7 @@ const OTPScreen: React.FC<OTPScreenProps> = ({ visible, onClick, Femail }) => {
       // Check if the request was successful
       if (response.ok) {
 
-        const result = await response.json();
+        // const result = await response.json();
   
         // OTP validation successful
         console.log("OTP MATCHES");
@@ -193,7 +192,7 @@ const OTPScreen: React.FC<OTPScreenProps> = ({ visible, onClick, Femail }) => {
                   </p>
                 )}
                 <button
-                  onClick={(e) => {
+                  onClick={() => {
                     startTimer();
                     handleRequestOTP();  
                   }}

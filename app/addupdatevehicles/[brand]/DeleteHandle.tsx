@@ -76,7 +76,7 @@ export const DeleteModelModal: React.FC<DeleteConfirmationModalProps> = ({ isOpe
           icon: <span style={{ color: 'white' , fontSize: '1.5rem'  }}><MdErrorOutline /></span>, // Custom icon with white color
         });
       }
-    } catch (error) {
+    } catch{
       toast.error("An error occurred while deleting the model", {
         position: "bottom-right",
         autoClose: 3000,

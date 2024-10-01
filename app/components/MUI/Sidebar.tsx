@@ -2,8 +2,6 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Button from '@mui/material/Button';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider } from '@mui/material';
 import { FaCar, FaChartPie, FaUserShield, FaTachometerAlt, FaFileAlt, FaSignOutAlt } from 'react-icons/fa';
 import { RxHamburgerMenu } from "react-icons/rx";

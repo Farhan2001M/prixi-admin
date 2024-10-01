@@ -8,7 +8,7 @@ interface ConfirmationOfPasswordScreenProps {
   onClick: () => void;
 }
 
-const ConfirmationOfPasswordScreen: React.FC<ConfirmationOfPasswordScreenProps> = ({ visible , onClick }) => {
+const ConfirmationOfPasswordScreen: React.FC<ConfirmationOfPasswordScreenProps> = ({ visible }) => {
   
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 

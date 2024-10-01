@@ -4,7 +4,6 @@ import Header from '../components/header'
 import TokenValidator from '../components/tokenvalidator'; 
 import ChartComponent from '../components/Visualizations/ChartComponent';
 import { useEffect, useState } from 'react';
-
 import CommentsChartComponent from '../components/Visualizations/CommentsChartComponent';
 import LikesChartComponent from '../components/Visualizations/LikesChartComponent';
 import VehicleTypeDistributionComponent from '../components/Visualizations/VehicleTypeDistributionComponent';
@@ -20,7 +19,7 @@ interface CarBrand {
 const UserInterface = () => {
 
   const [brandsData, setBrandsData] = useState<CarBrand[]>([]);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
   // Fetch the brands and models from the FastAPI backend
   const fetchBrandsModels = async () => {
@@ -29,11 +28,11 @@ const UserInterface = () => {
       const data = await response.json();
 
       setBrandsData(data);
-      setLoading(false);
+      // setLoading(false);
     
     } catch (error) {
       console.error('Error fetching brands and models:', error);
-      setLoading(false);
+      // setLoading(false);
     }
   };
   useEffect(() => {

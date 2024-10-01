@@ -2,10 +2,9 @@
 
 import React, { useEffect } from 'react';
 import { RxCrossCircled } from "react-icons/rx";
-import { useState, FormEvent } from 'react';
+import { useState } from 'react';
 import { IoEye, IoEyeOff } from 'react-icons/io5';
 // import ConfettiButton, { ConfettiButtonHandle } from '../ConfettiButton';
-import { useRef } from 'react';
 
 import ConfirmationOfPasswordScreen from './ConfirmationOfPasswordScreen';
 
@@ -34,7 +33,7 @@ const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , o
   }, [email]);
 
   const RSTvalidateFields = (name: string, value: string) => {
-    let RSTnewErrors: any = {};
+    const RSTnewErrors: any = {};
 
     if (name === 'password') {
       if (value.length < 1) {

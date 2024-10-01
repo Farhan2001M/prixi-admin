@@ -6,8 +6,6 @@ import { IoEye, IoEyeOff } from 'react-icons/io5';
 // import { useRouter } from 'next/navigation';
 import { GrLogin } from "react-icons/gr";
 import ForgotPassScreen from '../components/LoginFPSC/ForgotPassScreen';
-import { setCookie } from 'nookies'; // A Next.js-friendly library for handling cookies
-
 import { useRouter, useSearchParams } from 'next/navigation';
 
 const Myloginpage = () => {

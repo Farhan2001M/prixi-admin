@@ -192,7 +192,7 @@ export const EditModelModal: React.FC<EditModelModalProps> = ({ isOpen, onClose,
         const errorData = await response.json();
         setError(errorData.detail);
       }
-    } catch (error) {
+    } catch{
       setError("An error occurred while updating the model.");
     }
   };
