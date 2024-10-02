@@ -43,7 +43,7 @@ const UserInterface = () => {
   // Fetch the brands and models from the FastAPI backend
   const fetchBrandsModels = async () => {
     try {
-      const response = await fetch('https://de05-2407-d000-1a-66a0-6050-2c36-62e5-9435.ngrok-free.app/vehicles');
+      const response = await fetch('http://localhost:8000/vehicles');
       const data = await response.json();
 
       setBrandsData(data);
@@ -63,18 +63,32 @@ const UserInterface = () => {
       <TokenValidator /> 
       <Header/>
 
-      <div className='w-2/4 max-h-80 mx-auto'>
-        <ChartComponent brandsData={brandsData} />
+      <div className='p-4 '>
+      <div className='grid grid-cols-2 gap-4 '>
+        <div className='p-6'>
+          <ChartComponent brandsData={brandsData} />
+        </div>
+        <div className='p-6'>
+          <CommentsChartComponent brandsData={brandsData} />
+        </div>
+        <div className='p-6'>
+          <LikesChartComponent brandsData={brandsData} />
+        </div>
+        <div className='p-6'>
+          <VehicleTypeDistributionComponent brandsData={brandsData} />
+        </div>
+        <div className='p-6'>
+          <EngineTypeDistributionComponent brandsData={brandsData} />
+        </div>
+        <div className='p-6'>
+          <ColorsDistributionComponent brandsData={brandsData} />
+        </div>
+        {/* <div className='p-2'>
+          <SeatingCapacityDistributionComponent brandsData={brandsData} />
+        </div> */}
+      </div>
       </div>
 
-      <div className='w-2/4  mx-auto'>
-        <CommentsChartComponent brandsData={brandsData} />
-        <LikesChartComponent brandsData={brandsData} />
-        <VehicleTypeDistributionComponent brandsData={brandsData} />
-        <EngineTypeDistributionComponent brandsData={brandsData} />
-        <ColorsDistributionComponent brandsData={brandsData} />
-        <SeatingCapacityDistributionComponent brandsData={brandsData} />
-      </div>
     </div>  
   );
 };

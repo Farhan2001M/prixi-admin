@@ -12,6 +12,11 @@ interface SuccessResponse {
 }
 
 const ForgotPassScreen: React.FC<ForgotPassScreenProps> = ({ show, onClick }) => {
+
+  
+
+
+
   const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
   
   const [Femail, setFEmail] = useState<string>('');
@@ -19,6 +24,10 @@ const ForgotPassScreen: React.FC<ForgotPassScreenProps> = ({ show, onClick }) =>
   const [showOTPScreen, setShowOTPScreen] = useState<boolean>(false);
 
   const [EmailError, setEmailError] = useState('');
+
+  // useEffect(() => {
+  //   setFEmail('');
+  // }, [show]);
 
 
   useEffect(() => {
@@ -64,9 +73,6 @@ const ForgotPassScreen: React.FC<ForgotPassScreenProps> = ({ show, onClick }) =>
       setShowOTPScreen(true);
       onClick();
       setEmailError(''); // Clear any previous error
-      setTimeout(() => {
-          setFEmail(''); // Clear the email input after some delay
-      }, 1000);
 
     } catch (error) {
         console.error('An error occurred:', error);

@@ -11,7 +11,7 @@ const YourComponent = () => {
 
   const fetchBrandData = async () => {
     try {
-      const response = await fetch(`https://de05-2407-d000-1a-66a0-6050-2c36-62e5-9435.ngrok-free.app/getBrandData/${encodeURIComponent(brandName)}`);
+      const response = await fetch(`http://localhost:8000/getBrandData/${encodeURIComponent(brandName)}`);
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
@@ -30,7 +30,7 @@ const YourComponent = () => {
 
   return (
     <div>
-      <h1>Managing Vehicles for: {brandName || "Unknown Brand"}</h1>
+      <h1 className="text-3xl mx-auto mt-5 mb-8 text-center">Managing Vehicles for: {brandName || "Unknown Brand"}</h1>
       {brandData ?<FinalTable brandData={brandData} refreshModels={fetchBrandData} />: <> </> }
     </div>
   );

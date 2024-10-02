@@ -32,7 +32,7 @@ const AddUpdateVehicles = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const response = await fetch('https://de05-2407-d000-1a-66a0-6050-2c36-62e5-9435.ngrok-free.app/addvehiclebrand', {
+      const response = await fetch('http://localhost:8000/addvehiclebrand', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -44,6 +44,7 @@ const AddUpdateVehicles = () => {
         console.log(data.message); // Success message
         setRefreshTable(prev => !prev); // Toggle refresh to trigger re-fetch in BrandTable
         setBrandName(''); // Clear input field after successful addition
+        setIsButtonEnabled(false);
       } else {
         console.error(data.detail); // Error message
       }
