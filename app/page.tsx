@@ -10,6 +10,7 @@ const MainPage: React.FC = () => {
   return (
     <NextUIProvider>
       <main>
+        {/* Main Entry point of my Admin Web-App */}
         <LoginPage />
       </main>
     </NextUIProvider>
@@ -17,33 +18,3 @@ const MainPage: React.FC = () => {
 };
 
 export default MainPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// export default function Home() {
-//   return (
-//     <div>
-//       <p>Hello World..!</p>
-
-//       <h1 className="text-6xl">Chceking font </h1>
-//     </div>
-//   );
-// }
