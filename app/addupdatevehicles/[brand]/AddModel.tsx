@@ -1,6 +1,7 @@
 
 import React, { useState , useEffect} from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Input, Textarea, Select, SelectItem, Chip } from "@nextui-org/react";
+import { CustomToast , CustomToastContainer} from "../../components/CustomToastService"; // Import CustomToast for success and error notifications
 
 type AddModelModalProps = {
   isOpen: boolean;
@@ -29,25 +30,6 @@ export const AddModelModal: React.FC<AddModelModalProps> = ({ isOpen, onClose, b
     if (!isOpen) { setModelName(""); setDescription(""); setVariantInput(""); setLaunchPrice(undefined); setVehicleType(undefined); setSeatingCapacity(undefined); setEngineType(undefined); setColors([]); setHorsepower(undefined); setTorque(undefined); setYear(undefined); setVariants([]); setImages([]); }
   }, [isOpen]);
 
-  // const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const files = event.target.files;
-  //   if (files) {
-  //     const validFiles: File[] = [];
-  //     for (let i = 0; i < files.length; i++) {
-  //       const file = files[i];
-  //       if (file.size > 2 * 1024 * 1024) {
-  //         console.error(`File ${file.name} exceeds 2MB.`);
-  //       } else if (!["image/jpeg", "image/png"].includes(file.type)) {
-  //         console.error(`File ${file.name} must be a PNG or JPEG.`);
-  //       } else {
-  //         validFiles.push(file);
-  //       }
-  //     }
-  //     setImages(validFiles);
-  //   }
-  // };
-
-
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
@@ -55,7 +37,7 @@ export const AddModelModal: React.FC<AddModelModalProps> = ({ isOpen, onClose, b
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         if (!["image/jpeg", "image/png"].includes(file.type)) {
-          console.error(`File ${file.name} must be a PNG or JPEG.`);
+          CustomToast.error(`File ${file.name} must be a PNG or JPEG.`); // Show error toast
         } else {
           selectedFiles.push(file); // Keep the file regardless of size for now
         }
@@ -68,13 +50,13 @@ export const AddModelModal: React.FC<AddModelModalProps> = ({ isOpen, onClose, b
     if (e.key === "Enter" && variantInput.trim()) {
       if (/^(?=.*[a-zA-Z0-9])[a-zA-Z0-9]+([-#%&][a-zA-Z0-9]+)*(\s[a-zA-Z0-9]+([-#%&][a-zA-Z0-9]+)*)*$/.test(variantInput)) {
         if (variants.includes(variantInput.trim())) {
-          console.error("Variant already exists.");
+          CustomToast.error("Variant already exists."); // Show error toast
         } else {
           setVariants((prevVariants) => [...prevVariants, variantInput.trim()]);
           setVariantInput(""); // Clear the input after adding
         }
       } else {
-        console.error("Variant must be alphanumeric.");
+        CustomToast.error("Variant must be alphanumeric."); // Show error toast
       }
       e.preventDefault(); // Prevent form submission when pressing Enter
     }
@@ -86,28 +68,26 @@ export const AddModelModal: React.FC<AddModelModalProps> = ({ isOpen, onClose, b
 
   const handleSubmit = async () => {
     if (!modelName || !vehicleType || !engineType || !description || !torque || !year || !launchPrice || !horsepower || !seatingCapacity || colors.length === 0 || variants.length === 0) {
-      console.error("Please fill out all required fields.");
+      CustomToast.error("Please fill out all required fields."); // Show error toast
       return;
     }
 
     // Validation checks for the specified ranges
-    if (torque < 100 || torque > 2500) { console.error("Torque must be between 100 and 2500."); return; }
-    if (horsepower < 50 || horsepower > 1800) { console.error("Horsepower must be between 50 and 1800."); return; }
-    if (seatingCapacity < 2 || seatingCapacity > 9) { console.error("Seating capacity must be between 2 and 9."); return; }
-    if (launchPrice < 2500 || launchPrice > 50000000) { console.error("Launch price must be between 2500 and 50,000,000."); return; }
-    if (year < 1980 || year > 2025) { console.error("Year must be between 1980 and 2025."); return;}
+    if (torque < 100 || torque > 2500) { CustomToast.error("Torque must be between 100 and 2500."); return; }
+    if (horsepower < 50 || horsepower > 1800) { CustomToast.error("Horsepower must be between 50 and 1800."); return; }
+    if (seatingCapacity < 2 || seatingCapacity > 9) { CustomToast.error("Seating capacity must be between 2 and 9."); return; }
+    if (launchPrice < 2500 || launchPrice > 50000000) { CustomToast.error("Launch price must be between 2500 and 50,000,000."); return; }
+    if (year < 1980 || year > 2025) { CustomToast.error("Year must be between 1980 and 2025."); return;}
 
 
     // Image validation - Check if any image exceeds the 2MB size limit
     const oversizedImages = images.filter((image) => image.size > 2 * 1024 * 1024);
     console.log(oversizedImages);
     if (oversizedImages.length > 0) {
-      console.log("i runned")
       oversizedImages.forEach((image) => {
-          console.error(`File ${image.name} exceeds 2MB.`);
-        }
-      );
-      return; // Return early if any image exceeds the size limit
+        CustomToast.error(`File ${image.name} exceeds 2MB.`); // Show error toast
+      });
+      return; 
     }
 
 
@@ -144,21 +124,21 @@ export const AddModelModal: React.FC<AddModelModalProps> = ({ isOpen, onClose, b
       });
 
       if (response.ok) {
-        console.log("Model added successfully!");
+        CustomToast.success("Model added successfully!"); 
         onClose();
         onAddModel();
       } else {
         const errorData = await response.json();
-        console.error(errorData.detail);
+        CustomToast.error(errorData.detail || "Error adding model."); 
       }
     } catch (error) {
-      console.error("Error adding model:", error);
+      CustomToast.error("Error adding model: " + error); 
     }
   };
 
   return (
     <>
-      <Modal size="5xl" isOpen={isOpen} onOpenChange={onClose}>
+      <Modal size="5xl" isOpen={isOpen} isDismissable={false} onOpenChange={onClose}>
         <ModalContent>
           {(onCloseModal) => (
             <>
@@ -328,6 +308,8 @@ export const AddModelModal: React.FC<AddModelModalProps> = ({ isOpen, onClose, b
           )}
         </ModalContent>
       </Modal>
+      {/* ToastContainer for notifications */}
+      <CustomToastContainer />
     </>
   );
 };
@@ -344,3 +326,33 @@ const capitalizeModelName = (name: string) => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const files = event.target.files;
+  //   if (files) {
+  //     const validFiles: File[] = [];
+  //     for (let i = 0; i < files.length; i++) {
+  //       const file = files[i];
+  //       if (file.size > 2 * 1024 * 1024) {
+  //         console.error(`File ${file.name} exceeds 2MB.`);
+  //       } else if (!["image/jpeg", "image/png"].includes(file.type)) {
+  //         console.error(`File ${file.name} must be a PNG or JPEG.`);
+  //       } else {
+  //         validFiles.push(file);
+  //       }
+  //     }
+  //     setImages(validFiles);
+  //   }
+  // };

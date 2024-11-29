@@ -117,9 +117,7 @@ export default function App({ brandData , refreshModels }) {
     if (updatedVisibleColumns.has(columnKey)) {
       updatedVisibleColumns.delete(columnKey); // Uncheck column
     } else {
-      updatedVisibleColumns.add(columnKey); // Check column
-      
-      console.log(" change color button color  ")
+      updatedVisibleColumns.add(columnKey); // Check column      
     }
     // Ensure at least one column remains visible
     if (updatedVisibleColumns.size === 0) {
