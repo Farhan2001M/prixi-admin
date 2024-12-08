@@ -45,7 +45,7 @@ export default function SwipeableTemporaryDrawer() {
           { text: 'Add/Update Vehicles', icon: <FaCar className="h-6 w-6" />, path: '/addupdatevehicles' },
           { text: 'System Overview', icon: <FaChartPie className="h-6 w-6" />, path: '/system-overview' },
           { text: 'Admin Controls', icon: <FaUserShield className="h-6 w-6" />, path: '/admin-controls' },
-          { text: 'My Dashboard', icon: <FaTachometerAlt className="h-6 w-6" />, path: '/my-dashboard' },
+          { text: 'My Dashboard', icon: <FaTachometerAlt className="h-6 w-6" />, path: '/dashboard' },
           { text: 'Generate Reports', icon: <FaFileAlt className="h-6 w-6" />, path: '/generate-reports' },
         ].map(({ text, icon, path }) => (
           <ListItem key={text} disablePadding>

@@ -9,7 +9,7 @@ import LikesChartComponent from '../components/Visualizations/LikesChartComponen
 import VehicleTypeDistributionComponent from '../components/Visualizations/VehicleTypeDistributionComponent';
 import EngineTypeDistributionComponent from '../components/Visualizations/EngineTypeDistributionComponent';
 import ColorsDistributionComponent from '../components/Visualizations/ColorsDistributionComponent';
-import SeatingCapacityDistributionComponent from '../components/Visualizations/SeatingCapacityDistributionComponent';
+// import SeatingCapacityDistributionComponent from '../components/Visualizations/SeatingCapacityDistributionComponent';
 
 interface Comment {
   userEmail: string;
@@ -30,6 +30,7 @@ interface ModelData {
   images?: string[]; 
   comments?: Comment[]; 
 };
+
 interface CarBrand {
   brandName: string;
   models: ModelData[];

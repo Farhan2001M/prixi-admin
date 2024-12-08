@@ -8,20 +8,19 @@ interface VehicleTypeDistributionProps {
   brandsData: {
     models: {
       vehicleType?: string; // Optional
-    }[];
+    }[]; 
   }[];
 }
 
-// Function to generate distinct colors
-const generateColors = (count: number) => {
-  const colors: string[] = [];
-  const baseColors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#4B4CFF', '#FF6F61', '#45A1FF'];
-
-  for (let i = 0; i < count; i++) {
-    colors.push(baseColors[i % baseColors.length]);
-  }
-
-  return colors;
+// Define a color mapping for vehicle types
+const vehicleTypeColors: { [key: string]: string } = {
+  Sedan: '#000000',        // Red
+  'Pickup-Truck': '#EEA200', // Blue
+  Coupe: '#FFCE56',         // Yellow
+  SUV: '#4BC0C0',           // Teal
+  Hatchback: '#9966FF',     // Purple
+  Compact: '#FF9F40',       // Orange
+  Unknown: '#808080',      // Gray for unknown types
 };
 
 const VehicleTypeDistributionComponent: React.FC<VehicleTypeDistributionProps> = ({ brandsData }) => {
@@ -44,7 +43,9 @@ const VehicleTypeDistributionComponent: React.FC<VehicleTypeDistributionProps> =
 
     const labels = Object.keys(vehicleTypeCount);
     const data = Object.values(vehicleTypeCount);
-    const colors = generateColors(labels.length);
+    
+    // Map the colors based on the vehicle type
+    const colors = labels.map(type => vehicleTypeColors[type] || vehicleTypeColors['Unknown']);
 
     const myChart = new Chart(ctx, {
       type: 'pie',

@@ -96,7 +96,9 @@ const OTPScreen: React.FC<OTPScreenProps> = ({ visible, onClick, Femail }) => {
 
         // Check if the request was successful
         if (response.ok) {
-            const result = await response.json();
+
+            const result = await response.json();            
+            console.log(result);
             
             // OTP validation successful
             console.log("OTP MATCHES");

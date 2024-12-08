@@ -30,10 +30,10 @@ const EngineTypeDistributionComponent: React.FC<EngineTypeDistributionProps> = (
       });
     });
 
-    const colors: { [key: string]: string } = {
+    const colors  : { [key: string]: string } = {
       Diesel: '#FFD700', // Yellow
       Hybrid: '#0000FF', // Blue
-      Electric: '#00FF00', // Green
+      Electric: '#000000', // Green
       Petrol: '#000000', // Black
       Unknown: '#808080' // Gray for unknown types
     };    
