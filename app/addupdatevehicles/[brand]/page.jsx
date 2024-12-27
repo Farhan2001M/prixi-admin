@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import FinalTable from './FinalTable'
+import Header from '../../components/header';
 
 const YourComponent = () => {
   const params = useParams();
@@ -30,6 +31,7 @@ const YourComponent = () => {
 
   return (
     <div>
+      <Header/>
       <h1 className="text-3xl mx-auto mt-5 mb-8 text-center">Managing Vehicles for: {brandName || "Unknown Brand"}</h1>
       {brandData ?<FinalTable brandData={brandData} refreshModels={fetchBrandData} />: <> </> }
     </div>

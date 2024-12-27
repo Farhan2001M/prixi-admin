@@ -124,7 +124,7 @@ const Myloginpage = () => {
           // Store token and expiry time
           localStorage.setItem('token', token);
           localStorage.setItem('tokenExpiry', expiryTime.toString());
-          router.push('/adminpanel'); // Redirect to another page
+          router.push('/addupdatevehicles'); // Redirect to another page
 
         } else {
           console.error('Unexpected response:', data);

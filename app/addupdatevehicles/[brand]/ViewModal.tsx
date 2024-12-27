@@ -35,6 +35,20 @@ export const ViewModelModal: React.FC<ViewModelModalProps> = ({ isOpen, onClose,
         if (response.ok) {
           const data = await response.json();
           setModelData(data);
+
+
+          // Step 2: Trigger the vectorization process
+          const vectorizeResponse = await fetch(`http://localhost:8000/vehicles/vectorize`, {
+            method: "GET", // Changed to POST to match the server-side route
+          });
+
+          if (vectorizeResponse.ok) {
+            console.log("Vehicles vectorized successfully!");
+          } else {
+            const vectorizeError = await vectorizeResponse.json();
+            console.log(vectorizeError.detail || "Error vectorizing vehicles.");
+          }
+
         } else {
           console.error("Failed to fetch model data");
         }

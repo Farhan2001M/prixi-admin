@@ -122,18 +122,22 @@ export const AddModelModal: React.FC<AddModelModalProps> = ({ isOpen, onClose, b
         method: "POST",
         body: formData,
       });
-
+    
       if (response.ok) {
-        CustomToast.success("Model added successfully!"); 
+        CustomToast.success("Model added successfully!");
+    
+        
+    
         onClose();
         onAddModel();
       } else {
         const errorData = await response.json();
-        CustomToast.error(errorData.detail || "Error adding model."); 
+        CustomToast.error(errorData.detail || "Error adding model.");
       }
     } catch (error) {
-      CustomToast.error("Error adding model: " + error); 
+      CustomToast.error("Error adding model: " + error);
     }
+    
   };
 
   return (
