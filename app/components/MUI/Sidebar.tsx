@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Button from '@mui/material/Button';
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider } from '@mui/material';
-import { FaCar, FaChartPie, FaUserShield, FaTachometerAlt, FaFileAlt, FaSignOutAlt } from 'react-icons/fa';
+import { FaCar, FaTachometerAlt, FaSignOutAlt } from 'react-icons/fa';
 import { RxHamburgerMenu } from "react-icons/rx";
 import Link from 'next/link'
 
