@@ -96,6 +96,8 @@ const Myloginpage = () => {
 
         // Use the environment variable for the API base URL
         const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ;
+
+        console.log("API Base URL:", apiBaseUrl);
     
         // Send the request with query parameters
         const response = await fetch(`${apiBaseUrl}/adminlogin?${query}`, {

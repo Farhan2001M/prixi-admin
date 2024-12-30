@@ -44,6 +44,9 @@ const AddUpdateVehicles = () => {
         body: JSON.stringify({ brandName }),
       });
       const data = await response.json();
+
+      console.log("API Base URL:", apiBaseUrl);
+      
       if (response.ok) {
         console.log(data.message); // Success message
         setRefreshTable(prev => !prev); // Toggle refresh to trigger re-fetch in BrandTable
