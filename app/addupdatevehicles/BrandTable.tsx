@@ -36,11 +36,12 @@ export const BrandTable: React.FC<BrandTableProps> = ({ refresh }) => {
 
   // Use the environment variable for the API base URL
   // const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ;
 
   // Fetch the brands and models from the FastAPI backend
   const fetchBrandsModels = async () => {
     try {
-      const response = await fetch('http://localhost:8000/vehicles');
+      const response = await fetch(`${apiBaseUrl}/vehicles`);
       const data = await response.json();
       setBrandsData(data);
       setLoading(false);
