@@ -33,7 +33,7 @@ const AddUpdateVehicles = () => {
     event.preventDefault();
 
     // Use the environment variable for the API base URL
-    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ;
 
     try {
       const response = await fetch(`${apiBaseUrl}/addvehiclebrand`, {
