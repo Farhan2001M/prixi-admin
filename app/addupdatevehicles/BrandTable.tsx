@@ -34,13 +34,12 @@ export const BrandTable: React.FC<BrandTableProps> = ({ refresh }) => {
   const [brandsData, setBrandsData] = useState<CarBrand[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ;
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   // Fetch the brands and models from the FastAPI backend
   const fetchBrandsModels = async () => {
     try {
-      console.log("API Base URL:", apiBaseUrl);
-      const response = await fetch(`${apiBaseUrl}/vehicles`);
+      const response = await fetch(`${BASE_URL}/vehicles`);
       const data = await response.json();
       setBrandsData(data);
       setLoading(false);

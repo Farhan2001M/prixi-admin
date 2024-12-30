@@ -90,21 +90,16 @@ const Myloginpage = () => {
 
     if (!emailValidationError && !passwordValidationError) {
 
+      const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
       try {
-        // Construct the query string with email and password
         const query = new URLSearchParams({ email, password }).toString();
 
-        // Use the environment variable for the API base URL
-        const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ;
-
-        console.log("API Base URL:", apiBaseUrl);
-    
-        // Send the request with query parameters
-        const response = await fetch(`${apiBaseUrl}/adminlogin?${query}`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-            },
+        const response = await fetch(`${BASE_URL}/adminlogin?${query}`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+          },
         });
     
         // Check if the response was not OK (error cases)

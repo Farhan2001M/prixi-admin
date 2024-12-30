@@ -32,11 +32,10 @@ const AddUpdateVehicles = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    // Use the environment variable for the API base URL
-    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ;
-    
+    const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
     try {
-      const response = await fetch(`${apiBaseUrl}/addvehiclebrand`, {
+      const response = await fetch(`${BASE_URL}/addvehiclebrand`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -44,9 +43,6 @@ const AddUpdateVehicles = () => {
         body: JSON.stringify({ brandName }),
       });
       const data = await response.json();
-
-      console.log("API Base URL:", apiBaseUrl);
-      
       if (response.ok) {
         console.log(data.message); // Success message
         setRefreshTable(prev => !prev); // Toggle refresh to trigger re-fetch in BrandTable
