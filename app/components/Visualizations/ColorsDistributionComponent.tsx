@@ -93,7 +93,7 @@ const ColorsDistributionComponent: React.FC<ColorsDistributionProps> = ({ brands
     };
   }, [brandsData]);
 
-  return <canvas ref={canvasRef} />;
+  return <canvas ref={canvasRef} className='w-full mx-auto'/>;
 };
 
 export default ColorsDistributionComponent;

@@ -2,9 +2,9 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 
 import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell} from "@nextui-org/react";
-import {Button} from "@nextui-org/react";
+import {Button, Spinner } from "@nextui-org/react";
 import { Link } from "@nextui-org/react";
-
+import { FaCar } from 'react-icons/fa'; // Importing the car icon as well
 interface ModelData {
   modelName?: string;
   vehicleType?: string;
@@ -51,27 +51,42 @@ export const BrandTable: React.FC<BrandTableProps> = ({ refresh }) => {
   }, [refresh]);
 
   
-  if (loading) return <p>Loading...</p>;
+  if (loading) return ( 
+    <div className="flex flex-col items-center justify-center space-x-4 mt-32">
+      {/* Three spinners centered with the message */}
+      <div className="flex mb-4">
+        <Spinner size="lg" />
+        <Spinner size="lg" />
+        <Spinner size="lg" />
+      </div>
+      <div className="text-3xl flex items-center ml-4">
+        <FaCar className="mr-2" /> {/* Car icon */}
+        <span>Fetching Brands Data </span>
+        <FaCar className="ml-2" /> {/* Car icon */}
+      </div>
+    </div>
+  )
 
   return (
     <div>
       <Table isStriped aria-label="Example static collection table">
         <TableHeader>
-          <TableColumn>NAME</TableColumn>
-          <TableColumn>Models</TableColumn>
-          <TableColumn>Info</TableColumn>
+          <TableColumn>BrandNames</TableColumn>
+          <TableColumn className='text-center' >Models</TableColumn>
+          <TableColumn className='text-center' >Navigation Links</TableColumn>
         </TableHeader>
         <TableBody>
           {brandsData.map((brand, brandIndex) => (
             <TableRow key={brandIndex}>
               <TableCell>{brand.brandName}</TableCell>
-              <TableCell>{brand.models ? brand.models.length : 0}</TableCell> 
-              <TableCell>
+              <TableCell className='text-center' >{brand.models ? brand.models.length : 0}</TableCell> 
+              <TableCell className='flex justify-center'>
                 <Button
                   href={`/addupdatevehicles/${brand.brandName}`} 
                   as={Link}
                   color="primary"
                   variant="solid"
+                  className='min-w-[250px]'
                 >
                   See details for {brand.brandName.toLocaleUpperCase()}
                 </Button>

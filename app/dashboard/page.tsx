@@ -64,13 +64,13 @@ const Dashboard = () => {
 
       {/* First row of charts */}
       <div className='flex flex-wrap w-full'>
-        <div className='p-6 flex-1 md:w-1/3 sm:w-1/2 max-h-[700px]'>
+        <div className='p-6 flex-1 md:w-1/3 sm:w-1/2 max-h-[300px] mx-auto'>
           <VehicleTypeDistributionComponent brandsData={brandsData} />
         </div>
-        <div className='p-6 flex-1 md:w-1/3 sm:w-1/2 max-h-[700px]'>
+        <div className='p-6 flex-1 md:w-1/3 sm:w-1/2 max-h-[300px] mx-auto'>
           <EngineTypeDistributionComponent brandsData={brandsData} />
         </div>
-        <div className='p-6 flex-1 md:w-1/3 sm:w-1/2 max-h-[700px]'>
+        <div className='p-6 flex-1 md:w-1/3 sm:w-1/2 max-h-[300px] mx-auto'>
           <ColorsDistributionComponent brandsData={brandsData} />
         </div>
       </div>

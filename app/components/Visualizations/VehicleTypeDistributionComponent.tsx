@@ -67,7 +67,7 @@ const VehicleTypeDistributionComponent: React.FC<VehicleTypeDistributionProps> =
     };
   }, [brandsData]);
 
-  return <canvas ref={canvasRef} />;
+  return <canvas ref={canvasRef} className='w-full mx-auto' />;
 };
 
 export default VehicleTypeDistributionComponent;

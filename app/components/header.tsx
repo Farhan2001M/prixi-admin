@@ -8,7 +8,7 @@ const header = () => {
     <div className='flex justify-between items-center'>
         <Sidebar/>
         <h1 className="text-center text-4xl pl-6 font-medium">Admin Panel</h1>
-        <Link href="/adminpanel" className='my-auto mx-3'><img className="w-[120px] " src="/images/PBlogo.png" alt="" /></Link> 
+        <Link href="/dashboard" className='my-auto mx-3'><img className="w-[120px] " src="/images/PBlogo.png" alt="" /></Link> 
     </div>
   )
 }

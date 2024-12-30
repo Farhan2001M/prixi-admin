@@ -14,6 +14,7 @@ type ModelData = {
   engineType: string;
   description: string;
   torque: number;
+  year: number;
   launchPrice: number;
   horsepower: number;
   seatingCapacity: number;
@@ -92,27 +93,40 @@ export const ViewModelModal: React.FC<ViewModelModalProps> = ({ isOpen, onClose,
           {modelData.modelName} - {brandName}
         </ModalHeader>
         <ModalBody>
-          <p><strong>Vehicle Type:</strong> {modelData.vehicleType}</p>
-          <p><strong>Engine Type:</strong> {modelData.engineType}</p>
+          <div className="flex gap-8 w-full ">
+            <p><strong>Vehicle Type:</strong> {modelData.vehicleType}</p>
+            <p><strong>Engine Type:</strong> {modelData.engineType}</p>
+          </div>
+                    
+          <div className="flex gap-8 w-full ">
+            <p><strong>Torque:</strong> {modelData.torque} Nm</p>
+            <p><strong>Year:</strong> {modelData.year}</p>
+            <p><strong>Launch Price:</strong> ${modelData.launchPrice}</p>
+            <p><strong>Horsepower:</strong> {modelData.horsepower} HP</p>
+            <p><strong>Seating Capacity:</strong> {modelData.seatingCapacity}</p>
+          </div>
+
+          <div className="flex gap-8 w-full ">
+            <div>
+              <p><strong>Variants:</strong></p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                {modelData.variants.map((variant, index) => (
+                  <Chip key={index} color="secondary" variant="solid">{variant}</Chip>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <p><strong>Colors:</strong></p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                {modelData.colors.map((color, index) => (
+                  <Chip key={index} color="success" variant="solid">{color}</Chip>
+                ))}
+              </div>
+            </div>
+          </div>
+
           <p><strong>Description:</strong> {modelData.description}</p>
-          <p><strong>Torque:</strong> {modelData.torque} Nm</p>
-          <p><strong>Launch Price:</strong> ${modelData.launchPrice}</p>
-          <p><strong>Horsepower:</strong> {modelData.horsepower} HP</p>
-          <p><strong>Seating Capacity:</strong> {modelData.seatingCapacity}</p>
-
-          <p><strong>Variants:</strong></p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-            {modelData.variants.map((variant, index) => (
-              <Chip key={index} color="secondary" variant="solid">{variant}</Chip>
-            ))}
-          </div>
-
-          <p><strong>Colors:</strong></p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-            {modelData.colors.map((color, index) => (
-              <Chip key={index} color="success" variant="solid">{color}</Chip>
-            ))}
-          </div>
 
           <p><strong>Images:</strong></p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>

@@ -71,7 +71,7 @@ const AddUpdateVehicles = () => {
             </Button>
           </div>
         </form>
-        <div>
+        <div className='w-3/4 mx-auto'>
           <BrandTable refresh={refreshTable} />
         </div>
       </div>
