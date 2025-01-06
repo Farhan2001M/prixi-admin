@@ -17,7 +17,7 @@ interface ChartComponentProps {
     brandsData: Brand[];
 }
 
-const ChartComponent: React.FC<ChartComponentProps> = ({ brandsData }) => {
+const ModelCountChartComponent: React.FC<ChartComponentProps> = ({ brandsData }) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     // Define an array of unique colors
@@ -34,7 +34,6 @@ const ChartComponent: React.FC<ChartComponentProps> = ({ brandsData }) => {
         '#9966FF', // Purple
         '#FFCE56', // Yellow
         '#FF9F40', // Orange
-        // Add more colors if needed
     ];
 
     useEffect(() => {
@@ -75,23 +74,5 @@ const ChartComponent: React.FC<ChartComponentProps> = ({ brandsData }) => {
     return <canvas ref={canvasRef} />;
 };
 
-export default ChartComponent;
+export default ModelCountChartComponent;
 
-
-
-// backgroundColor: [
-//   '#FF6384', // Red
-//   '#36A2EB', // Blue
-//   '#FFCE56', // Yellow
-//   '#4BC0C0', // Green
-//   '#9966FF', // Purple
-//   '#FF9F40', // Orange
-// ],
-// borderColor: [
-//   '#FF6384',
-//   '#36A2EB',
-//   '#FFCE56',
-//   '#4BC0C0',
-//   '#9966FF',
-//   '#FF9F40',
-// ],

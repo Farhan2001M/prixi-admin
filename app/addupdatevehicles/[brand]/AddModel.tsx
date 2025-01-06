@@ -127,9 +127,6 @@ export const AddModelModal: React.FC<AddModelModalProps> = ({ isOpen, onClose, b
     
       if (response.ok) {
         CustomToast.success("Model added successfully!");
-    
-        
-    
         onClose();
         onAddModel();
       } else {
@@ -139,7 +136,6 @@ export const AddModelModal: React.FC<AddModelModalProps> = ({ isOpen, onClose, b
     } catch (error) {
       CustomToast.error("Error adding model: " + error);
     }
-    
   };
 
   return (
@@ -300,6 +296,7 @@ export const AddModelModal: React.FC<AddModelModalProps> = ({ isOpen, onClose, b
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                   />
+                  
                 </form>
               </ModalBody>
               <ModalFooter>
@@ -328,37 +325,3 @@ const capitalizeModelName = (name: string) => {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(" ")
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const files = event.target.files;
-  //   if (files) {
-  //     const validFiles: File[] = [];
-  //     for (let i = 0; i < files.length; i++) {
-  //       const file = files[i];
-  //       if (file.size > 2 * 1024 * 1024) {
-  //         console.error(`File ${file.name} exceeds 2MB.`);
-  //       } else if (!["image/jpeg", "image/png"].includes(file.type)) {
-  //         console.error(`File ${file.name} must be a PNG or JPEG.`);
-  //       } else {
-  //         validFiles.push(file);
-  //       }
-  //     }
-  //     setImages(validFiles);
-  //   }
-  // };

@@ -5,24 +5,10 @@ import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell} from "@
 import {Button, Spinner } from "@nextui-org/react";
 import { Link } from "@nextui-org/react";
 import { FaCar } from 'react-icons/fa'; // Importing the car icon as well
-interface ModelData {
-  modelName?: string;
-  vehicleType?: string;
-  engineType?: string;
-  description?: string;
-  torque?: number;
-  launchPrice?: number;
-  horsepower?: number;
-  seatingCapacity?: number;
-  variants?: string[];
-  colors?: string[];
-  images?: string[]; // Base64 encoded images
-  comments?: string[]; // Base64 encoded images
-};
 
 interface CarBrand {
   brandName: string;
-  models: ModelData[];
+  modelsCount: number; // Now we're using modelsCount instead of models
 }
 
 interface BrandTableProps {
@@ -81,7 +67,7 @@ export const BrandTable: React.FC<BrandTableProps> = ({ refresh }) => {
           {brandsData.map((brand, brandIndex) => (
             <TableRow key={brandIndex}>
               <TableCell>{brand.brandName}</TableCell>
-              <TableCell className='text-center' >{brand.models ? brand.models.length : 0}</TableCell> 
+              <TableCell className='text-center' >{brand.modelsCount ? brand.modelsCount : 0}</TableCell> 
               <TableCell className='flex justify-center'>
                 <Button
                   href={`/addupdatevehicles/${brand.brandName}`} 
@@ -100,4 +86,3 @@ export const BrandTable: React.FC<BrandTableProps> = ({ refresh }) => {
     </div>
   );  
 }
-

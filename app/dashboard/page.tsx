@@ -2,14 +2,13 @@
 
 import Header from '../components/header'
 import TokenValidator from '../components/tokenvalidator'; 
-import ChartComponent from '../components/Visualizations/ChartComponent';
+import ModelCountChartComponent from '../components/Visualizations/ModelCountChartComponent';
 import { useEffect, useState } from 'react';
 import CommentsChartComponent from '../components/Visualizations/CommentsChartComponent';
 import LikesChartComponent from '../components/Visualizations/LikesChartComponent';
 import VehicleTypeDistributionComponent from '../components/Visualizations/VehicleTypeDistributionComponent';
 import EngineTypeDistributionComponent from '../components/Visualizations/EngineTypeDistributionComponent';
 import ColorsDistributionComponent from '../components/Visualizations/ColorsDistributionComponent';
-// import SeatingCapacityDistributionComponent from '../components/Visualizations/SeatingCapacityDistributionComponent';
 
 interface Comment {
   userEmail: string;
@@ -20,14 +19,11 @@ interface ModelData {
   modelName: string;
   vehicleType?: string;
   engineType?: string;
-  description?: string;
   torque?: number;
   launchPrice?: number;
   horsepower?: number;
   seatingCapacity?: number;
-  variants?: string[];
   colors?: string[];
-  images?: string[]; 
   comments?: Comment[]; 
 };
 
@@ -45,7 +41,7 @@ const Dashboard = () => {
     const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
     
     try {
-      const response = await fetch(`${BASE_URL}/vehicles`);
+      const response = await fetch(`${BASE_URL}/vehiclesDashboard`);
       const data = await response.json();
 
       setBrandsData(data);
@@ -80,7 +76,7 @@ const Dashboard = () => {
       {/* Second row of charts */}
       <div className='flex flex-wrap w-full'>
         <div className='p-6 flex-1 md:w-1/3 sm:w-1/2 max-h-[500px]'>
-          <ChartComponent brandsData={brandsData} />
+          <ModelCountChartComponent brandsData={brandsData} />
         </div>
         <div className='p-6 flex-1 md:w-1/3 sm:w-1/2 max-h-[500px]'>
           <CommentsChartComponent brandsData={brandsData} />

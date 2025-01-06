@@ -22,7 +22,6 @@ const statusColorMap = {
   Hybrid: "secondary",
 };
 
-
 // Define the vehicle types for the dropdown
 const vehicleTypeOptions = [
   { uid: "SUV", name: "SUV" },
@@ -70,14 +69,11 @@ export default function App({ brandData , refreshModels }) {
     setPage(1);
     setRowsPerPage(5);
   };
-  
-
 
   // Ensure that brandData.brandName and brandData.models are defined before using them
   const brandname = brandData?.brandName ?? "";
   const models = brandData?.models ?? [];
 
-  
   const filteredModels = React.useMemo(() => {
     let filtered = models;
     // Filter by search input
@@ -187,11 +183,6 @@ export default function App({ brandData , refreshModels }) {
 
   const pages = Math.ceil(sortedModels.length / rowsPerPage);
 
-  // const handleView = (model, brand) => {
-  //   console.log("model is " ,model)
-  //   console.log("brand is " ,brand)
-  // };
-
   // Function to handle search input change
   const onSearchChange = React.useCallback((value) => {
     if (value) {
@@ -201,10 +192,7 @@ export default function App({ brandData , refreshModels }) {
       setFilterValue("");
     }
   }, []);
-
-  // const onNextPage = React.useCallback(() => { if (page < pages) { setPage(page + 1); } }, [page, pages]);
-  // const onPreviousPage = React.useCallback(() => { if (page > 1) { setPage(page - 1); } }, [page]);
-
+  
   const onClear = React.useCallback(()=>{
     setFilterValue("")
     setPage(1)
@@ -215,11 +203,8 @@ export default function App({ brandData , refreshModels }) {
     setPage(1);
   }, []);
 
-
-
   const [selectedBrand, setSelectedBrand] = React.useState(null);
   const [selectedModel, setSelectedModel] = React.useState(null);
-
 
   {/* Functionality For Adding a new model */}{/* Functionality For Adding a new model */}
   const [isAddNewModalOpen, setIsAddNewModalOpen] = React.useState(null);
@@ -236,7 +221,6 @@ export default function App({ brandData , refreshModels }) {
     refreshModels();
   };
 
-
   {/* Functionality For View modal */}{/* Functionality For View modal */}
   const [isViewModalOpen, setIsViewModalOpen] = React.useState(false);
   const handleView = (model, brand) => {
@@ -249,7 +233,6 @@ export default function App({ brandData , refreshModels }) {
   const handleCloseViewModal = () => {
     setIsViewModalOpen(false);
   };
-
 
   {/* Functionality For Editing the modal */}{/* Functionality For Editing the modal */}
   const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
@@ -268,10 +251,6 @@ export default function App({ brandData , refreshModels }) {
     refreshModels();
   };
 
-
-
-
-
   {/* Functionality For Delete modal */}{/* Functionality For Delete modal */}
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
   const handleDelete = (model, brand) => {
@@ -286,9 +265,6 @@ export default function App({ brandData , refreshModels }) {
     console.log("Model deleted successfully!");
     refreshModels();
   };
-
-
-
 
   const topContent = React.useMemo(() => {
     return (

@@ -2,7 +2,7 @@
 
 import Header from '../components/header'
 import TokenValidator from '../components/tokenvalidator'; 
-import ChartComponent from '../components/Visualizations/ChartComponent';
+import ChartComponent from '../components/Visualizations/ModelCountChartComponent';
 import { useEffect, useState } from 'react';
 import CommentsChartComponent from '../components/Visualizations/CommentsChartComponent';
 import LikesChartComponent from '../components/Visualizations/LikesChartComponent';
