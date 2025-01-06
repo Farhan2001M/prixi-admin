@@ -74,7 +74,7 @@ const Dashboard = () => {
         <div className='p-6 flex-1 md:w-1/3 sm:w-1/2 max-h-[300px] mx-auto'>
           <ColorsDistributionComponent brandsData={brandsData} />
           <p className='text-center my-2'>Color Distribution Chart</p>
-          <p className='text-center text-sm text-gray-600'>Hover over the pie's to see more info such as vehicle count and their color Distribution</p>
+          <p className='text-center text-sm text-gray-600'>Hover over the pie&apos;s to see more info such as vehicle count and their color Distribution</p>
         </div>
       </div>
 

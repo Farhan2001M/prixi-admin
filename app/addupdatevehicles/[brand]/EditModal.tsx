@@ -88,11 +88,10 @@ export const EditModelModal: React.FC<EditModelModalProps> = ({ isOpen, onClose,
     setImageUrlInput(""); // Clear the input after adding
   };
 
-  const handleRemoveImageUrl = (urlToRemove: string) => {
-    setImageUrls((prevUrls) => prevUrls.filter((url) => url !== urlToRemove));
-  };
+  // const handleRemoveImageUrl = (urlToRemove: string) => {
+  //   setImageUrls((prevUrls) => prevUrls.filter((url) => url !== urlToRemove));
+  // };
 
-  
   const handleAddVariant = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && variantInput.trim()) {
       if (/^[a-zA-Z0-9]+$/.test(variantInput)) {
