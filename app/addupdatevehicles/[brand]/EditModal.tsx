@@ -34,8 +34,9 @@ export const EditModelModal: React.FC<EditModelModalProps> = ({ isOpen, onClose,
   useEffect(() => {
     if (isOpen) {
       const fetchModelData = async () => {
+        const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ;
         try {
-          const response = await fetch(`http://localhost:8000/vehicles/${brandName}/${modelName}`);
+          const response = await fetch(`${BASE_URL}/vehicles/${brandName}/${modelName}`);
           if (response.ok) {
             const data = await response.json();
             setNewModelName(data.modelName); // Set initial model name
@@ -161,7 +162,8 @@ export const EditModelModal: React.FC<EditModelModalProps> = ({ isOpen, onClose,
     images.forEach((image) => formData.append("images", image));
 
     try {
-      const response = await fetch(`http://localhost:8000/vehicles/${brandName}/update-model/${modelName}`, {
+      const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+      const response = await fetch(`${BASE_URL}/vehicles/${brandName}/update-model/${modelName}`, {
         method: "PUT",
         body: formData,
       });

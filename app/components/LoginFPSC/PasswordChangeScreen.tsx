@@ -79,17 +79,9 @@ const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , o
   const isButtonDisabled = (): boolean => {
     return ( !!RSTerrors.password || !!RSTerrors.confirmPassword || !RSTpassword || !RSTconfirmPassword );
   };
-
-  // const isButtonDisabled = () => {
-  //   return RSTerrors.password || RSTerrors.confirmPassword || !RSTpassword || !RSTconfirmPassword;
-  // };
-  
-  
-  {/* Success Password Change Screen Code */}
  
   const [showConfirmationOfPasswordScreen, setShowConfirmationOfPasswordScreen] = useState<boolean>(false);
   
-
   async function changeUserPassword() {
     const passwordData = {
       email: myemail, // The email of the user whose password is being changed
@@ -97,7 +89,8 @@ const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , o
     };
   
     try {
-      const response = await fetch('http://localhost:8000/admin-change-password', { // Replace with your actual backend URL
+      const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+      const response = await fetch(`${BASE_URL}/admin-change-password`, { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -223,8 +216,6 @@ const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , o
               >
                 Confirm Reset Password
               </button>
-              {/* <ConfettiButton ref={confettiButtonRef} /> */}
-              {/* The ConfettiButton component, which will handle the animation */}
 
             </div>
           </div>

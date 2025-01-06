@@ -20,8 +20,9 @@ const YourComponent = () => {
   };
 
   const fetchBrandData = async () => {
+    const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ;
     try {
-      const response = await fetch(`http://localhost:8000/getBrandData/${encodeURIComponent(brandName)}`);
+      const response = await fetch(`${BASE_URL}/getBrandData/${encodeURIComponent(brandName)}`);
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }

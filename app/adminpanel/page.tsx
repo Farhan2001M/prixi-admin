@@ -44,7 +44,8 @@ const UserInterface = () => {
   // Fetch the brands and models from the FastAPI backend
   const fetchBrandsModels = async () => {
     try {
-      const response = await fetch('http://localhost:8000/vehicles');
+      const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ;
+      const response = await fetch(`${BASE_URL}/vehicles`);
       const data = await response.json();
 
       setBrandsData(data);

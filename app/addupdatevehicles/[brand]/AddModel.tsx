@@ -117,8 +117,10 @@ export const AddModelModal: React.FC<AddModelModalProps> = ({ isOpen, onClose, b
       formData.append(`images`, image);
     });
 
+    const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ;
+
     try {
-      const response = await fetch(`http://localhost:8000/vehicles/${brandName}/add-model`, {
+      const response = await fetch(`${BASE_URL}/vehicles/${brandName}/add-model`, {
         method: "POST",
         body: formData,
       });

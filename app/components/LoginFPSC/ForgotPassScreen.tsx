@@ -45,7 +45,8 @@ const ForgotPassScreen: React.FC<ForgotPassScreenProps> = ({ show, onClick }) =>
   const handleRequestOTP = async () => {
     setIsValidEmail(false);
     try {
-      const response = await fetch('http://localhost:8000/admin-forgot-password', {
+      const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ;
+      const response = await fetch(`${BASE_URL}/admin-forgot-password`, {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
