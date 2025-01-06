@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { BrandTable } from './BrandTable';
 import Header from '../components/header';
 import { Button, Input } from "@nextui-org/react";
+import { CustomToast , CustomToastContainer } from "../components/CustomToastService"; // Import CustomToast for success and error notifications
 
 const AddUpdateVehicles = () => {
   const [brandName, setBrandName] = useState('');
@@ -44,12 +45,14 @@ const AddUpdateVehicles = () => {
       });
       const data = await response.json();
       if (response.ok) {
+        CustomToast.success(data.message); // Success notification
         console.log(data.message); // Success message
         setRefreshTable(prev => !prev); // Toggle refresh to trigger re-fetch in BrandTable
         setBrandName(''); // Clear input field after successful addition
         setIsButtonEnabled(false);
       } else {
-        console.error(data.detail); // Error message
+        CustomToast.error(data.detail); // Error notification
+        // console.error(data.detail); // Error message
       }
     } catch (error) {
       console.error('Error:', error);
@@ -78,6 +81,8 @@ const AddUpdateVehicles = () => {
           <BrandTable refresh={refreshTable} />
         </div>
       </div>
+      {/* ToastContainer for notifications */}
+      <CustomToastContainer />
     </div>
   );
 };
