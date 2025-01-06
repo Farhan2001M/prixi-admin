@@ -152,7 +152,8 @@ export const ViewModelModal: React.FC<ViewModelModalProps> = ({ isOpen, onClose,
                 width={100}
                 height={100}
                 isZoomed
-              />
+                className="border border-black " // Tailwind classes for border and rounded corners
+              />  
             ))}
           </div>
         </ModalBody>
