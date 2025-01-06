@@ -94,21 +94,26 @@ export const ViewModelModal: React.FC<ViewModelModalProps> = ({ isOpen, onClose,
           {modelData.modelName} - {brandName}
         </ModalHeader>
         <ModalBody>
-          <div className="flex gap-8 w-full ">
-            <p><strong>Vehicle Type:</strong> {modelData.vehicleType}</p>
-            <p><strong>Engine Type:</strong> {modelData.engineType}</p>
-          </div>
-                    
-          <div className="flex gap-8 w-full ">
-            <p><strong>Torque:</strong> {modelData.torque} Nm</p>
-            <p><strong>Year:</strong> {modelData.year}</p>
-            <p><strong>Launch Price:</strong> ${modelData.launchPrice}</p>
-            <p><strong>Horsepower:</strong> {modelData.horsepower} HP</p>
-            <p><strong>Seating Capacity:</strong> {modelData.seatingCapacity}</p>
+          <div className="flex gap-8 w-full">
+            <p className="min-w-[200px]">
+              <strong>Vehicle Type:</strong> {modelData.vehicleType}
+            </p>
+            <p className="min-w-[200px]">
+              <strong>Engine Type:</strong> {modelData.engineType}
+            </p>
+            <p className="min-w-[200px]">
+              <strong>Seating Capacity:</strong> {modelData.seatingCapacity}
+            </p>
           </div>
 
-          <div className="flex gap-8 w-full ">
-            <div>
+          <div className="flex gap-8 w-full">
+            <p className="min-w-[200px]">
+              <strong>Torque:</strong> {modelData.torque} Nm
+            </p>
+            <p className="min-w-[200px]">
+              <strong>Horsepower:</strong> {modelData.horsepower} HP
+            </p>
+            <div className="flex gap-5 justify-center items-center min-w-[200px]">
               <p><strong>Variants:</strong></p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
                 {modelData.variants.map((variant, index) => (
@@ -116,8 +121,16 @@ export const ViewModelModal: React.FC<ViewModelModalProps> = ({ isOpen, onClose,
                 ))}
               </div>
             </div>
+          </div>
 
-            <div>
+          <div className="flex gap-8 w-full">
+            <p className="min-w-[200px]">
+              <strong>Model Year:</strong> {modelData.year}
+            </p>
+            <p className="min-w-[200px]">
+              <strong>Launch Price:</strong> ${modelData.launchPrice}
+            </p>
+            <div className="flex gap-5 justify-center items-center  min-w-[200px]">
               <p><strong>Colors:</strong></p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
                 {modelData.colors.map((color, index) => (
@@ -134,7 +147,7 @@ export const ViewModelModal: React.FC<ViewModelModalProps> = ({ isOpen, onClose,
             {modelData.images.map((image, index) => (
               <Image
                 key={index}
-                src={`data:image/jpeg;base64,${image}`}
+                src={image} // Use the URL directly
                 alt={`Image ${index + 1}`}
                 width={100}
                 height={100}

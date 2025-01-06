@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Input } from "@nextui-org/react";
-import { CustomToast, CustomToastContainer } from "../../components/CustomToastService"; 
+import { CustomToast } from "../../components/CustomToastService"; 
 
 // Define the prop types
 type DeleteConfirmationModalProps = {
@@ -91,8 +91,6 @@ export const DeleteModelModal: React.FC<DeleteConfirmationModalProps> = ({ isOpe
           )}
         </ModalContent>
       </Modal>
-      {/* ToastContainer for notifications */}
-      <CustomToastContainer />
     </>
   );
 };

@@ -155,11 +155,12 @@ export default function App({ brandData , refreshModels }) {
       case "modelName":
         return (
           <User
-            avatarProps={{ radius: "md", src: model.images.length > 0 ? `data:image/jpeg;base64,${model.images[0]}` : null }}
+            avatarProps={{ 
+              radius: "md", 
+              src: model.images.length > 0 ? model.images[0] : null 
+            }}
             name={cellValue}
-            // description={model.description}
           >
-            {/* {model.description} */}
           </User>
         );
       case "engineType":

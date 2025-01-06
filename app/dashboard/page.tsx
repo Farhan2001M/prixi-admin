@@ -64,17 +64,22 @@ const Dashboard = () => {
       <div className='flex flex-wrap w-full'>
         <div className='p-6 flex-1 md:w-1/3 sm:w-1/2 max-h-[300px] mx-auto'>
           <VehicleTypeDistributionComponent brandsData={brandsData} />
+          <p className='text-center my-2'>Vehicle-Type Distribution Chart</p>
+
         </div>
         <div className='p-6 flex-1 md:w-1/3 sm:w-1/2 max-h-[300px] mx-auto'>
           <EngineTypeDistributionComponent brandsData={brandsData} />
+          <p className='text-center my-2'>Engine-Type Distribution Chart</p>
         </div>
         <div className='p-6 flex-1 md:w-1/3 sm:w-1/2 max-h-[300px] mx-auto'>
           <ColorsDistributionComponent brandsData={brandsData} />
+          <p className='text-center my-2'>Color Distribution Chart</p>
+          <p className='text-center text-sm text-gray-600'>Hover over the pie's to see more info such as vehicle count and their color Distribution</p>
         </div>
       </div>
 
       {/* Second row of charts */}
-      <div className='flex flex-wrap w-full'>
+      <div className='flex flex-wrap w-full mt-20'>
         <div className='p-6 flex-1 md:w-1/3 sm:w-1/2 max-h-[500px]'>
           <ModelCountChartComponent brandsData={brandsData} />
         </div>

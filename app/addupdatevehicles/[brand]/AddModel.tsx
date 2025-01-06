@@ -1,7 +1,7 @@
 
 import React, { useState , useEffect} from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Input, Textarea, Select, SelectItem, Chip } from "@nextui-org/react";
-import { CustomToast , CustomToastContainer} from "../../components/CustomToastService"; // Import CustomToast for success and error notifications
+import { CustomToast } from "../../components/CustomToastService"; // Import CustomToast for success and error notifications
 
 type AddModelModalProps = {
   isOpen: boolean;
@@ -23,27 +23,36 @@ export const AddModelModal: React.FC<AddModelModalProps> = ({ isOpen, onClose, b
   const [variants, setVariants] = useState<string[]>([]);
   const [variantInput, setVariantInput] = useState<string>(""); // Track the variant input field
   const [colors, setColors] = useState<string[]>([]); // Changed to array instead of Set
-  const [images, setImages] = useState<File[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [imageUrlInput, setImageUrlInput] = useState<string>("");
 
   // Clear form on close
   useEffect(() => {
-    if (!isOpen) { setModelName(""); setDescription(""); setVariantInput(""); setLaunchPrice(undefined); setVehicleType(undefined); setSeatingCapacity(undefined); setEngineType(undefined); setColors([]); setHorsepower(undefined); setTorque(undefined); setYear(undefined); setVariants([]); setImages([]); }
+    if (!isOpen) { setModelName(""); setDescription(""); setVariantInput(""); setLaunchPrice(undefined); setVehicleType(undefined); setSeatingCapacity(undefined); setEngineType(undefined); setColors([]); setHorsepower(undefined); setTorque(undefined); setYear(undefined); setVariants([]); setImageUrls([]);  setImageUrlInput(""); }
   }, [isOpen]);
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      const selectedFiles: File[] = [];
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        if (!["image/jpeg", "image/png"].includes(file.type)) {
-          CustomToast.error(`File ${file.name} must be a PNG or JPEG.`); // Show error toast
-        } else {
-          selectedFiles.push(file); // Keep the file regardless of size for now
-        }
-      }
-      setImages(selectedFiles);
+  const handleImageUrlPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const pastedText = e.clipboardData.getData("text");
+    const urlRegex = /^(https?:\/\/[^\s/$.?#].[^\s]*)$/i;
+  
+    if (!urlRegex.test(pastedText)) {
+      CustomToast.error("Invalid URL. Please paste a valid image URL.");
+      e.preventDefault(); // Prevent pasting non-URL text
+      return;
     }
+  
+    if (imageUrls.length >= 5) {
+      CustomToast.error("You can only add up to 5 image URLs.");
+      e.preventDefault(); // Prevent pasting more than 5 URLs
+      return;
+    }
+  
+    setImageUrls((prevUrls) => [...prevUrls, pastedText.trim()]);
+    setImageUrlInput(""); // Clear the input after adding
+  };
+
+  const handleRemoveImageUrl = (urlToRemove: string) => {
+    setImageUrls((prevUrls) => prevUrls.filter((url) => url !== urlToRemove));
   };
   
   const handleAddVariant = (e: React.KeyboardEvent) => {
@@ -67,7 +76,7 @@ export const AddModelModal: React.FC<AddModelModalProps> = ({ isOpen, onClose, b
   };
 
   const handleSubmit = async () => {
-    if (!modelName || !vehicleType || !engineType || !description || !torque || !year || !launchPrice || !horsepower || !seatingCapacity || colors.length === 0 || variants.length === 0) {
+    if (!modelName || !vehicleType || !engineType || !description || !torque || !year || !launchPrice || !horsepower || !seatingCapacity || colors.length === 0 || variants.length === 0 || imageUrls.length === 0 ) {
       CustomToast.error("Please fill out all required fields."); // Show error toast
       return;
     }
@@ -80,15 +89,7 @@ export const AddModelModal: React.FC<AddModelModalProps> = ({ isOpen, onClose, b
     if (year < 1980 || year > 2025) { CustomToast.error("Year must be between 1980 and 2025."); return;}
 
 
-    // Image validation - Check if any image exceeds the 2MB size limit
-    const oversizedImages = images.filter((image) => image.size > 2 * 1024 * 1024);
-    console.log(oversizedImages);
-    if (oversizedImages.length > 0) {
-      oversizedImages.forEach((image) => {
-        CustomToast.error(`File ${image.name} exceeds 2MB.`); // Show error toast
-      });
-      return; 
-    }
+    
 
 
     const formData = new FormData();
@@ -112,13 +113,12 @@ export const AddModelModal: React.FC<AddModelModalProps> = ({ isOpen, onClose, b
       formData.append("colors", color);
     });
 
-    // Append images
-    images.forEach((image) => {
-      formData.append(`images`, image);
+    imageUrls.forEach((imageUrl) => {
+      formData.append("imageUrls", imageUrl);
     });
 
     const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ;
-
+    console.log("Data being sent:", formData);
     try {
       const response = await fetch(`${BASE_URL}/vehicles/${brandName}/add-model`, {
         method: "POST",
@@ -259,13 +259,14 @@ export const AddModelModal: React.FC<AddModelModalProps> = ({ isOpen, onClose, b
                     </Select>
 
                     <Input
-                      type="file"
-                      multiple
-                      accept="image/png, image/jpeg"
-                      onChange={handleImageChange}
-                      isClearable
-                      classNames={{ inputWrapper: [ "py-7"]}}
+                      label="Image URLs"
+                      placeholder="Paste image URL here"
+                      value={imageUrlInput}
+                      onPaste={handleImageUrlPaste}
+                      onFocus={() => setImageUrlInput("")} // Optional: Reset or handle focus event if needed
                     />
+                    <div>{imageUrls.length} / 5 URLs added</div>
+
                   </div>
 
                   <Input
@@ -296,7 +297,7 @@ export const AddModelModal: React.FC<AddModelModalProps> = ({ isOpen, onClose, b
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                   />
-                  
+
                 </form>
               </ModalBody>
               <ModalFooter>
@@ -311,8 +312,8 @@ export const AddModelModal: React.FC<AddModelModalProps> = ({ isOpen, onClose, b
           )}
         </ModalContent>
       </Modal>
-      {/* ToastContainer for notifications */}
-      <CustomToastContainer />
+      {/* ToastContainer for notifications
+      <CustomToastContainer /> */}
     </>
   );
 };

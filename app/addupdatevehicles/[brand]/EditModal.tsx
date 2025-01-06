@@ -1,5 +1,6 @@
-import React, { useState, useEffect , CSSProperties } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Input, Textarea, Select, SelectItem, Chip, } from "@nextui-org/react";
+import { CustomToast , CustomToastContainer } from "../../components/CustomToastService"; // Import CustomToast for success and error notifications
 
 type EditModelModalProps = {
   isOpen: boolean;
@@ -23,18 +24,17 @@ export const EditModelModal: React.FC<EditModelModalProps> = ({ isOpen, onClose,
   const [variants, setVariants] = useState<string[]>([]);
   const [variantInput, setVariantInput] = useState<string>("");
   const [colors, setColors] = useState<string[]>([]);
-  const [images, setImages] = useState<File[]>([]);
   const [existingImages, setExistingImages] = useState<string[]>([]); // Store current images
   const [error, setError] = useState<string | null>(null); // Error state
-
-  const [modalImage, setModalImage] = useState<string | null>(null);
-  const [holdTimeout, setHoldTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [imageUrlInput, setImageUrlInput] = useState<string>("");
 
   // Fetch existing model data when modal is opened
   useEffect(() => {
     if (isOpen) {
       const fetchModelData = async () => {
         const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ;
+        setImageUrls([]); // Clear image URLs when opening the modal
         try {
           const response = await fetch(`${BASE_URL}/vehicles/${brandName}/${modelName}`);
           if (response.ok) {
@@ -68,30 +68,31 @@ export const EditModelModal: React.FC<EditModelModalProps> = ({ isOpen, onClose,
     setVariantInput("");
   },[isOpen])
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      const selectedFiles: File[] = [];
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        if (!["image/jpeg", "image/png"].includes(file.type)) {
-          console.error(`File ${file.name} must be a PNG or JPEG.`);
-        } else {
-          selectedFiles.push(file); // Keep the file regardless of size for now
-        }
-      }
-      setImages(selectedFiles);
+  const handleImageUrlPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const pastedText = e.clipboardData.getData("text");
+    const urlRegex = /^(https?:\/\/[^\s/$.?#].[^\s]*)$/i;
+  
+    if (!urlRegex.test(pastedText)) {
+      CustomToast.error("Invalid URL. Please paste a valid image URL.");
+      e.preventDefault(); // Prevent pasting non-URL text
+      return;
     }
+  
+    if (imageUrls.length + existingImages.length >= 5) {
+      CustomToast.error("You can only add up to 5 image URLs.");
+      e.preventDefault(); // Prevent pasting more than 5 URLs
+      return;
+    }
+  
+    setImageUrls((prevUrls) => [...prevUrls, pastedText.trim()]);
+    setImageUrlInput(""); // Clear the input after adding
   };
 
-  const handleRemoveImage = (index: number, isExisting: boolean = false) => {
-    if (isExisting) {
-      setExistingImages((prev) => prev.filter((_, i) => i !== index)); // Remove existing image
-    } else {
-      setImages((prev) => prev.filter((_, i) => i !== index)); // Remove new image
-    }
+  const handleRemoveImageUrl = (urlToRemove: string) => {
+    setImageUrls((prevUrls) => prevUrls.filter((url) => url !== urlToRemove));
   };
 
+  
   const handleAddVariant = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && variantInput.trim()) {
       if (/^[a-zA-Z0-9]+$/.test(variantInput)) {
@@ -118,7 +119,7 @@ export const EditModelModal: React.FC<EditModelModalProps> = ({ isOpen, onClose,
   const handleSubmit = async () => {
     setError(null); // Clear error before submission
 
-    if (!newModelName || !vehicleType || !engineType || !description || !torque || !year || !launchPrice || !horsepower || !seatingCapacity || colors.length === 0 || variants.length === 0 || (existingImages.length === 0 && images.length === 0)) {
+    if (!newModelName || !vehicleType || !engineType || !description || !torque || !year || !launchPrice || !horsepower || !seatingCapacity || colors.length === 0 || variants.length === 0 || (existingImages.length === 0 && imageUrls.length === 0)) {
       setError("Please fill out all required fields.");
       return;
     }
@@ -129,18 +130,6 @@ export const EditModelModal: React.FC<EditModelModalProps> = ({ isOpen, onClose,
     if (seatingCapacity < 2 || seatingCapacity > 9) { console.error("Seating capacity must be between 2 and 9."); return; }
     if (launchPrice < 2500 || launchPrice > 50000000) { console.error("Launch price must be between 2500 and 50,000,000."); return; }
     if (year < 1980 || year > 2025) { console.error("Year must be between 1980 and 2025."); return;}
-
-    // Image validation - Check if any image exceeds the 2MB size limit
-    const oversizedImages = images.filter((image) => image.size > 2 * 1024 * 1024);
-    console.log(oversizedImages);
-    if (oversizedImages.length > 0) {
-      console.log("i runned")
-      oversizedImages.forEach((image) => {
-          console.error(`File ${image.name} exceeds 2MB.`);
-        }
-      );
-      return; // Return early if any image exceeds the size limit
-    }
 
 
     const formData = new FormData();
@@ -158,18 +147,18 @@ export const EditModelModal: React.FC<EditModelModalProps> = ({ isOpen, onClose,
     variants.forEach((variant) => formData.append("variants", variant));
     colors.forEach((color) => formData.append("colors", color));
 
-    // Append new images
-    images.forEach((image) => formData.append("images", image));
+     // Append new images and existing images
+    [...existingImages, ...imageUrls].forEach((imageUrl) => formData.append("imageUrls", imageUrl)); // Merging both arrays before appending
 
     try {
-      const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+      const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ;
       const response = await fetch(`${BASE_URL}/vehicles/${brandName}/update-model/${modelName}`, {
         method: "PUT",
         body: formData,
       });
 
       if (response.ok) {
-        console.log("Model updated successfully!");
+        CustomToast.success("Model updated successfully!");
         onClose(); // Close the modal after successful update
         onEdit();
       } else {
@@ -181,302 +170,206 @@ export const EditModelModal: React.FC<EditModelModalProps> = ({ isOpen, onClose,
     }
   };
 
-  const handleMouseDown = (image: string) => {
-    const timeoutId = setTimeout(() => {
-      setModalImage(image);
-    }, 1000); // Show image after 1 second of holding
-
-    setHoldTimeout(timeoutId);
-  };
-
-  const handleMouseUp = () => {
-    if (holdTimeout) {
-      clearTimeout(holdTimeout);
-      setHoldTimeout(null);
-    }
-    setModalImage(null); // Hide image when mouse is released
-  };
-
-  const handleDoubleClick = (index: number, isExisting: boolean) => {
-    handleRemoveImage(index, isExisting);
-  };
+ 
+  
 
   return (
-    <Modal size="5xl" isOpen={isOpen} onOpenChange={onClose}>
-      <ModalContent>
-        {(onCloseModal) => (
-          <>
-            <ModalHeader>Edit Model: {modelName} ({brandName})</ModalHeader>
-            <ModalBody>
-              <form className="flex flex-col gap-4">
-                <Input
-                  label="Model Name"
-                  value={newModelName}
-                  onChange={(e) => setNewModelName(e.target.value)} // Editable field
-                  required
-                />
+    <>
+      <Modal size="5xl" isOpen={isOpen} onOpenChange={onClose}>
+        <ModalContent>
+          {(onCloseModal) => (
+            <>
+              <ModalHeader>Edit Model: {modelName} ({brandName})</ModalHeader>
+              <ModalBody>
+                <form className="flex flex-col gap-4">
+                  <Input
+                    label="Model Name"
+                    value={newModelName}
+                    onChange={(e) => setNewModelName(e.target.value)} // Editable field
+                    required
+                  />
 
-                <div className="flex gap-5">
+                  <div className="flex gap-5">
+                    <Select
+                      label="Vehicle Type"
+                      selectedKeys={vehicleType ? new Set([vehicleType]) : new Set([])}
+                      onSelectionChange={(keys) => {
+                        const selectedKey = Array.from(keys)[0];
+                        setVehicleType(selectedKey as string);
+                      }}
+                    >
+                        <SelectItem key="SUV">SUV</SelectItem>
+                        <SelectItem key="Sedan">Sedan</SelectItem>
+                        <SelectItem key="Compact">Compact</SelectItem>
+                        <SelectItem key="Coupe">Coupe</SelectItem>
+                        <SelectItem key="Hatchback">Hatchback</SelectItem>
+                        <SelectItem key="Pickup-Truck">Pickup-Truck</SelectItem>
+                    </Select>
+
+                    <Select
+                      label="Engine Type"
+                      selectedKeys={engineType ? new Set([engineType]) : new Set([])}
+                      onSelectionChange={(keys) => {
+                        const selectedKey = Array.from(keys)[0];
+                        setEngineType(selectedKey as string);
+                      }}
+                    >
+                        <SelectItem key="Petrol">Petrol</SelectItem>
+                        <SelectItem key="Diesel">Diesel</SelectItem>
+                        <SelectItem key="Electric">Electric</SelectItem>
+                        <SelectItem key="Hybrid">Hybrid</SelectItem>
+                    </Select>
+                  </div>
+
+                  <div className="flex gap-5">
+                    <Input
+                      label="Torque"
+                      type="number"
+                      value={torque?.toString() || ""}
+                      onChange={(e) => setTorque(e.target.value ? parseFloat(e.target.value) : undefined)}
+                    />
+
+                    <Input
+                      label="Year"
+                      type="number"
+                      placeholder="Enter Year value"
+                      value={year?.toString() || ""}
+                      onChange={(e) => setYear(e.target.value ? parseFloat(e.target.value) : undefined)}  
+                    />
+
+                    <Input
+                      label="Launch Price"
+                      type="number"
+                      value={launchPrice?.toString() || ""}
+                      onChange={(e) => setLaunchPrice(e.target.value ? parseFloat(e.target.value) : undefined)}
+                    />
+
+                    <Input
+                      label="Horsepower"
+                      type="number"
+                      value={horsepower?.toString() || ""}
+                      onChange={(e) => setHorsepower(e.target.value ? parseFloat(e.target.value) : undefined)}
+                    />
+
+                    <Input
+                      label="Seating Capacity"
+                      type="number"
+                      value={seatingCapacity?.toString() || ""}
+                      onChange={(e) => setSeatingCapacity(e.target.value ? parseFloat(e.target.value) : undefined)}
+                    />
+                  </div>
+
                   <Select
-                    label="Vehicle Type"
-                    selectedKeys={vehicleType ? new Set([vehicleType]) : new Set([])}
-                    onSelectionChange={(keys) => {
-                      const selectedKey = Array.from(keys)[0];
-                      setVehicleType(selectedKey as string);
-                    }}
+                    label="Colors"
+                    multiple
+                    selectedKeys={new Set(colors)}
+                    onSelectionChange={(keys) => setColors(Array.from(keys) as string[])}
                   >
-                      <SelectItem key="SUV">SUV</SelectItem>
-                      <SelectItem key="Sedan">Sedan</SelectItem>
-                      <SelectItem key="Compact">Compact</SelectItem>
-                      <SelectItem key="Coupe">Coupe</SelectItem>
-                      <SelectItem key="Hatchback">Hatchback</SelectItem>
-                      <SelectItem key="Pickup-Truck">Pickup-Truck</SelectItem>
+                    <SelectItem key="Black">Black</SelectItem>
+                    <SelectItem key="White">White</SelectItem>
+                    <SelectItem key="Red">Red</SelectItem>
+                    <SelectItem key="Blue">Blue</SelectItem>
+                    <SelectItem key="Yellow">Yellow</SelectItem>
+                    <SelectItem key="Pink">Pink</SelectItem>
+                    <SelectItem key="Green">Green</SelectItem>
+                    <SelectItem key="Aura">Aura</SelectItem>
+                    <SelectItem key="Teal">Teal</SelectItem>
+                    <SelectItem key="Gray">Gray</SelectItem>
+                    <SelectItem key="Brown">Brown</SelectItem>
+                    <SelectItem key="Ivory">Ivory</SelectItem>
+                    <SelectItem key="Silver">Silver</SelectItem>
                   </Select>
 
-                  <Select
-                    label="Engine Type"
-                    selectedKeys={engineType ? new Set([engineType]) : new Set([])}
-                    onSelectionChange={(keys) => {
-                      const selectedKey = Array.from(keys)[0];
-                      setEngineType(selectedKey as string);
-                    }}
-                  >
-                      <SelectItem key="Petrol">Petrol</SelectItem>
-                      <SelectItem key="Diesel">Diesel</SelectItem>
-                      <SelectItem key="Electric">Electric</SelectItem>
-                      <SelectItem key="Hybrid">Hybrid</SelectItem>
-                  </Select>
-                </div>
+                  
+                  <div className="flex gap-5">
+                    <Input
+                      label="Image URLs"
+                      placeholder="Paste image URL here"
+                      value={imageUrlInput}
+                      onPaste={handleImageUrlPaste}
+                      onFocus={() => setImageUrlInput("")} // Optional: Reset or handle focus event if needed
+                    />
 
-                <div className="flex gap-5">
-                  <Input
-                    label="Torque"
-                    type="number"
-                    value={torque?.toString() || ""}
-                    onChange={(e) => setTorque(e.target.value ? parseFloat(e.target.value) : undefined)}
-                  />
+                    <div className="flex justify-between">
+                      <div className="flex gap-2">
+                        {existingImages.map((imageUrl, index) => (
+                          <div
+                            key={index}
+                            className="relative w-14 h-14" // Tailwind classes for square container (6rem x 6rem)
+                          >
+                            <img 
+                              src={imageUrl} 
+                              alt="Existing" 
+                              className="w-full h-full object-cover rounded-md" // Tailwind classes to fill the container with the image, maintaining the aspect ratio
+                            />
+                          </div>
+                        ))}
 
-                  <Input
-                    label="Year"
-                    type="number"
-                    placeholder="Enter Year value"
-                    value={year?.toString() || ""}
-                    onChange={(e) => setYear(e.target.value ? parseFloat(e.target.value) : undefined)}  
-                  />
-
-                  <Input
-                    label="Launch Price"
-                    type="number"
-                    value={launchPrice?.toString() || ""}
-                    onChange={(e) => setLaunchPrice(e.target.value ? parseFloat(e.target.value) : undefined)}
-                  />
-
-                  <Input
-                    label="Horsepower"
-                    type="number"
-                    value={horsepower?.toString() || ""}
-                    onChange={(e) => setHorsepower(e.target.value ? parseFloat(e.target.value) : undefined)}
-                  />
-
-                  <Input
-                    label="Seating Capacity"
-                    type="number"
-                    value={seatingCapacity?.toString() || ""}
-                    onChange={(e) => setSeatingCapacity(e.target.value ? parseFloat(e.target.value) : undefined)}
-                  />
-                </div>
-
-                <Select
-                  label="Colors"
-                  multiple
-                  selectedKeys={new Set(colors)}
-                  onSelectionChange={(keys) => setColors(Array.from(keys) as string[])}
-                >
-                  <SelectItem key="Black">Black</SelectItem>
-                  <SelectItem key="White">White</SelectItem>
-                  <SelectItem key="Red">Red</SelectItem>
-                  <SelectItem key="Blue">Blue</SelectItem>
-                  <SelectItem key="Yellow">Yellow</SelectItem>
-                  <SelectItem key="Pink">Pink</SelectItem>
-                  <SelectItem key="Green">Green</SelectItem>
-                  <SelectItem key="Aura">Aura</SelectItem>
-                  <SelectItem key="Teal">Teal</SelectItem>
-                  <SelectItem key="Gray">Gray</SelectItem>
-                  <SelectItem key="Brown">Brown</SelectItem>
-                  <SelectItem key="Ivory">Ivory</SelectItem>
-                  <SelectItem key="Silver">Silver</SelectItem>
-                </Select>
-
-                {/* <Input
-                  type="file"
-                  multiple
-                  accept="image/png, image/jpeg"
-                  onChange={handleImageChange}
-                />
-
-                <div className="flex gap-2">
-                  {existingImages.map((image, index) => (
-                    <div key={index} className="relative">
-                      <img src={data:image/jpeg;base64,${image}} alt="Existing" width="100px" />
-                      <button
-                        className="absolute top-0 right-0 bg-red-500 text-white"
-                        onClick={() => handleRemoveImage(index, true)}
-                      >
-                        X
-                      </button>
-                    </div>
-                  ))}
-                  {images.map((image, index) => (
-                    <div key={index} className="relative">
-                      <img src={URL.createObjectURL(image)} alt="New" width="100px" />
-                      <button
-                        className="absolute top-0 right-0 bg-red-500 text-white"
-                        onClick={() => handleRemoveImage(index, false)}
-                      >
-                        X
-                      </button>
-                    </div>
-                  ))}
-                </div> */}
-
-                <Input
-                  type="file"
-                  multiple
-                  accept="image/png, image/jpeg"
-                  onChange={handleImageChange}
-                />
-                <div className="flex justify-between">
-                  <div className="flex gap-2">
-                    {existingImages.map((image, index) => (
-                      <div
-                        key={index}
-                        className="relative"
-                        onMouseDown={() => handleMouseDown(`data:image/jpeg;base64,${image}`)}
-                        onMouseUp={handleMouseUp}
-                        onDoubleClick={() => handleDoubleClick(index, true)}
-                      >
-                        <img src={`data:image/jpeg;base64,${image}`} alt="Existing" width="100px" />
+                        {imageUrls.map((imageUrl, index) => (
+                          <div
+                            key={index}
+                            className="relative w-14 h-14 " // Tailwind classes for square container (6rem x 6rem)
+                          >
+                            <img 
+                              src={imageUrl} 
+                              alt="New" 
+                              className="w-full h-full object-cover rounded-md" // Tailwind classes to fill the container with the image, maintaining the aspect ratio
+                            />
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                    {images.map((image, index) => (
-                      <div
-                        key={index}
-                        className="relative"
-                        onMouseDown={() => handleMouseDown(URL.createObjectURL(image))}
-                        onMouseUp={handleMouseUp}
-                        onDoubleClick={() => handleDoubleClick(index, false)}
-                      >
-                        <img src={URL.createObjectURL(image)} alt="New" width="100px" />
+                    </div>
+                  </div>
+
+
+                  <Input
+                    label="Variants"
+                    value={variantInput}
+                    onChange={(e) => setVariantInput(e.target.value)}
+                    onKeyDown={handleAddVariant}
+                    endContent={
+                      <div className="flex gap-2">
+                        {variants.map((variant) => (
+                          <Chip
+                            key={variant}
+                            onClose={() => handleRemoveVariant(variant)}
+                            color="success"
+                            variant="solid"
+                          >
+                            {variant}
+                          </Chip>
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    }
+                  />
 
-                  <div className="flex flex-col gap-5 items-end">
-                    <Chip color="danger"size="md">
-                        Double Click to remove image
-                    </Chip>
-                    <Chip color="danger" size="md">
-                        Click and hold the image to display in enlarged view
-                    </Chip>
-                  </div>
-
-                </div>
-                
-
-                {modalImage && (
-                  <div className="modal" style={modalStyle}>
-                    <img src={modalImage} alt="Enlarged" width="500px" height="500px" />
-                  </div>
-                )}
-
-                {/* <Input
-                  type="file"
-                  multiple
-                  accept="image/png, image/jpeg"
-                  onChange={handleImageChange}
-                  endContent={
-                    <div className="flex gap-2">
-                      {existingImages.map((image, index) => (
-                        <Chip
-                          key={`existing-${index}`}
-                          onClose={() => handleRemoveImage(index, true)}
-                          color="primary"
-                          variant="bordered"
-                          size="lg"
-                          className="h-8"
-                        >
-                          <img src={`data:image/jpeg;base64,${image}`} alt="Existing" width="50px" />
-                        </Chip>
-                      ))}
-                      {images.map((image, index) => (
-                        <Chip
-                          key={`new-${index}`}
-                          onClose={() => handleRemoveImage(index, false)}
-                          color="primary"
-                          variant="flat"
-                        >
-                          <img src={URL.createObjectURL(image)} alt="New" width="50px" />
-                        </Chip>
-                      ))}
-                    </div>
-                  }
-                /> */}
-
-                <Input
-                  label="Variants"
-                  value={variantInput}
-                  onChange={(e) => setVariantInput(e.target.value)}
-                  onKeyDown={handleAddVariant}
-                  endContent={
-                    <div className="flex gap-2">
-                      {variants.map((variant) => (
-                        <Chip
-                          key={variant}
-                          onClose={() => handleRemoveVariant(variant)}
-                          color="success"
-                          variant="solid"
-                        >
-                          {variant}
-                        </Chip>
-                      ))}
-                    </div>
-                  }
-                />
-
-                <Textarea
-                  label="Description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
-              </form>
-              {error && <div className="text-red-500">{error}</div>}
-            </ModalBody>
-            <ModalFooter>
-              <Button color="secondary" onPress={handleSubmit}>
-                Update Model
-              </Button>
-              <Button color="secondary" onPress={onCloseModal}>
-                Cancel
-              </Button>
-            </ModalFooter>
-          </>
-        )}
-      </ModalContent>
-    </Modal>
+                  <Textarea
+                    label="Description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
+                </form>
+                {error && <div className="text-red-500">{error}</div>}
+              </ModalBody>
+              <ModalFooter>
+                <Button color="secondary" onPress={handleSubmit}>
+                  Update Model
+                </Button>
+                <Button color="secondary" onPress={onCloseModal}>
+                  Cancel
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      {/* ToastContainer for notifications */}
+      <CustomToastContainer />
+    </>
   );
 };
 
 
-const modalStyle: CSSProperties = {
-  position: 'fixed',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  backgroundColor: 'white',
-  boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-  zIndex: 1000,
-  transition: 'opacity 0.3s ease',
-};
 
 
 // const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
