@@ -35,13 +35,13 @@ const ColorsDistributionComponent: React.FC<ColorsDistributionProps> = ({ brands
 
   useEffect(() => {
     if (!canvasRef.current) return;
-
+  
     const ctx = canvasRef.current.getContext('2d');
     if (!ctx) return; // Ensure ctx is valid
-
+  
     // Count occurrences of each color
     const colorCount: { [key: string]: number } = {};
-
+  
     brandsData.forEach(brand => {
       brand.models.forEach(model => {
         model.colors?.forEach(color => {
@@ -49,16 +49,18 @@ const ColorsDistributionComponent: React.FC<ColorsDistributionProps> = ({ brands
         });
       });
     });
-
+  
     const labels = Object.keys(colorCount);
     const data = Object.values(colorCount);
-    
+  
+    const totalCount = data.reduce((sum, count) => sum + count, 0);
+  
     // Map the colors based on the color name
     const colors = labels.map(color => colorNameMapping[color] || colorNameMapping['Unknown']);
-
-    // Create a pie chart instead of radar
+  
+    // Create a pie chart
     const myChart = new Chart(ctx, {
-      type: 'pie', // Change to 'pie' for pie chart
+      type: 'pie',
       data: {
         labels,
         datasets: [{
@@ -76,9 +78,10 @@ const ColorsDistributionComponent: React.FC<ColorsDistributionProps> = ({ brands
             callbacks: {
               label: (tooltipItem) => {
                 const label = tooltipItem.label || '';
-                const value = tooltipItem.raw || 0;
-                // Show color name in tooltip with count
-                return `${label}: ${value}`;
+                const value = tooltipItem.raw as number || 0;
+                const percentage = ((value / totalCount) * 100).toFixed(2);
+                // Show color name with percentage in tooltip
+                return `${label}: ${percentage}%`;
               },
             },
           },
@@ -88,13 +91,14 @@ const ColorsDistributionComponent: React.FC<ColorsDistributionProps> = ({ brands
         },
       },
     });
-
+  
     return () => {
       myChart.destroy();
     };
   }, [brandsData]);
-
+  
   return <canvas ref={canvasRef} className='w-full mx-auto' />;
+  
 };
 
 export default ColorsDistributionComponent;

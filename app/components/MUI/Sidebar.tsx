@@ -42,8 +42,8 @@ export default function SwipeableTemporaryDrawer() {
       <Divider />
       <List>
         {[
-          { text: 'Add/Update Vehicles', icon: <FaCar className="h-6 w-6" />, path: '/addupdatevehicles' },
-          { text: 'Admin Dashboard', icon: <FaTachometerAlt className="h-6 w-6" />, path: '/dashboard' },
+          { text: 'Add/Update Vehicles', icon: <FaCar className="h-6 w-full" />, path: '/addupdatevehicles' },
+          { text: 'Admin Dashboard', icon: <FaTachometerAlt className="h-6 w-full" />, path: '/dashboard' },
         ].map(({ text, icon, path }) => (
           <ListItem key={text} disablePadding>
             <Link href={path} style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -60,7 +60,7 @@ export default function SwipeableTemporaryDrawer() {
       <List>
         <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
             <ListItemButton>
-                <ListItemIcon> <FaSignOutAlt className="h-6 w-6" /> </ListItemIcon>
+                <ListItemIcon> <FaSignOutAlt className="h-6 w-full" /> </ListItemIcon>
                 <ListItemText primary={"Logout"} />
             </ListItemButton>
         </Link>

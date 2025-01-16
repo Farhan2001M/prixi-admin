@@ -28,25 +28,27 @@ const VehicleTypeDistributionComponent: React.FC<VehicleTypeDistributionProps> =
 
   useEffect(() => {
     if (!canvasRef.current) return;
-
+  
     const ctx = canvasRef.current.getContext('2d');
     if (!ctx) return; // Ensure ctx is valid
-
+  
     const vehicleTypeCount: { [key: string]: number } = {};
-
+  
     brandsData.forEach(brand => {
       brand.models.forEach(model => {
         const type = model.vehicleType || "Unknown"; // Default to "Unknown"
         vehicleTypeCount[type] = (vehicleTypeCount[type] || 0) + 1;
       });
     });
-
+  
     const labels = Object.keys(vehicleTypeCount);
     const data = Object.values(vehicleTypeCount);
-    
+  
+    const totalCount = data.reduce((sum, count) => sum + count, 0);
+  
     // Map the colors based on the vehicle type
     const colors = labels.map(type => vehicleTypeColors[type] || vehicleTypeColors['Unknown']);
-
+  
     const myChart = new Chart(ctx, {
       type: 'pie',
       data: {
@@ -59,13 +61,25 @@ const VehicleTypeDistributionComponent: React.FC<VehicleTypeDistributionProps> =
       },
       options: {
         responsive: true,
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function (tooltipItem) {
+                const count = tooltipItem.raw as number;
+                const percentage = ((count / totalCount) * 100).toFixed(2);
+                return `${tooltipItem.label}: ${percentage}%`;
+              },
+            },
+          },
+        },
       },
     });
-
+  
     return () => {
       myChart.destroy();
     };
   }, [brandsData]);
+  
 
   return <canvas ref={canvasRef} className='w-full mx-auto' />;
 };

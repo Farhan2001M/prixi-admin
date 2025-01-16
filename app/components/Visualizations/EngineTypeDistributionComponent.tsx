@@ -17,27 +17,29 @@ const EngineTypeDistributionComponent: React.FC<EngineTypeDistributionProps> = (
 
   useEffect(() => {
     if (!canvasRef.current) return;
-
+  
     const ctx = canvasRef.current.getContext('2d');
     if (!ctx) return; // Ensure ctx is valid
-
+  
     const engineTypeCount: { [key: string]: number } = {};
-
+  
     brandsData.forEach(brand => {
       brand.models.forEach(model => {
         const type = model.engineType || "Unknown"; // Default to "Unknown"
         engineTypeCount[type] = (engineTypeCount[type] || 0) + 1;
       });
     });
-
-    const colors  : { [key: string]: string } = {
+  
+    const totalCount = Object.values(engineTypeCount).reduce((sum, count) => sum + count, 0);
+  
+    const colors: { [key: string]: string } = {
       Diesel: '#FFD700', // Yellow
       Hybrid: '#0000FF', // Blue
       Electric: '#000000', // Green
       Petrol: '#000000', // Black
-      Unknown: '#808080' // Gray for unknown types
-    };    
-
+      Unknown: '#808080', // Gray for unknown types
+    };
+  
     const myChart = new Chart(ctx, {
       type: 'doughnut',
       data: {
@@ -50,13 +52,24 @@ const EngineTypeDistributionComponent: React.FC<EngineTypeDistributionProps> = (
       },
       options: {
         responsive: true,
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function (tooltipItem) {
+                const count = tooltipItem.raw as number;
+                const percentage = ((count / totalCount) * 100).toFixed(2);
+                return `${tooltipItem.label}: ${percentage}%`;
+              }
+            }
+          }
+        }
       },
     });
-
+  
     return () => {
       myChart.destroy();
     };
-  }, [brandsData]);
+  }, [brandsData]);  
 
   return <canvas ref={canvasRef} className='w-full mx-auto'/>;
 };
